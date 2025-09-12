@@ -4,36 +4,42 @@ public abstract class EntityState
 {
     protected Player player;
     protected StateMachine stateMachine;
-    protected string stateName;
+    protected string animBoolName;
 
-    public EntityState(Player player, StateMachine stateMachine, string stateName)
+    protected Animator anim;
+    protected Rigidbody2D rb;
+    protected PlayerInputSet input;
+
+    public EntityState(Player player, StateMachine stateMachine, string animBoolName)
     {
         this.player = player;
         this.stateMachine = stateMachine;
-        this.stateName = stateName;
+        this.animBoolName = animBoolName;
+        anim = player.anim;
+        rb = player.rb;
+        input = player.input;
     }
-
-    protected EntityState(StateMachine stateMachine, string stateName)
+    protected EntityState(StateMachine stateMachine, string animBoolName)
     {
         this.stateMachine = stateMachine;
-        this.stateName = stateName;
+        this.animBoolName = animBoolName;
     }
 
     public virtual void Enter()
     {
         // Code to execute when entering the state, every time state will be changed, enter will be called
-        Debug.Log($"Entering state: " + stateName);
+        anim.SetBool(animBoolName, true);
     }
 
     public virtual void Update()
     {
         // Code to execute every frame while in this state
-        Debug.Log($"Updating state: " + stateName);
+        anim.SetFloat("yVelocity", rb.linearVelocity.y);
     }
 
     public virtual void Exit()
     {
         // Code to execute when exiting the state
-        Debug.Log($"Exiting state: " + stateName);
+        anim.SetBool(animBoolName, false);
     }
 }
