@@ -461,7 +461,7 @@ GameObject:
   - component: {fileID: 643256586}
   - component: {fileID: 643256585}
   - component: {fileID: 643256584}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Platform (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -577,12 +577,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 643256583}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.4218, y: -0.57, z: 0}
-  m_LocalScale: {x: 2.9627125, y: 1.5131267, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.44518837, y: 3.0303, z: 0}
+  m_LocalScale: {x: 0.38050002, y: 5.005091, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1772830887}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1772830884
 GameObject:
@@ -595,8 +595,8 @@ GameObject:
   - component: {fileID: 1772830887}
   - component: {fileID: 1772830886}
   - component: {fileID: 1772830885}
-  m_Layer: 0
-  m_Name: Platform
+  m_Layer: 6
+  m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -715,7 +715,8 @@ Transform:
   m_LocalPosition: {x: 0.0446, y: -1.719, z: 0}
   m_LocalScale: {x: 7.786367, y: 0.7434051, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 643256586}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1779294189
@@ -749,9 +750,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da25d16ddfb75684397e10dc01dde267, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  jumpForce: 5
+  moveSpeed: 8
+  jumpForce: 12
+  wallJumpForce: {x: 6, y: 12}
+  inAirMoveMultiplier: 0.7
+  wallSlideMultiplier: 0.7
   isFacingRight: 1
+  groundCheckDistance: 1.4
+  wallCheckDistance: 0.4
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!4 &1779294191
 Transform:
   m_ObjectHideFlags: 0
@@ -783,8 +792,8 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_GravityScale: 3
+  m_Material: {fileID: 6200000, guid: a5ecbf1211c52b342824891b7d31f9c9, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -829,8 +838,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.03063637, y: -0.28185484}
-  m_Size: {x: 1.137237, y: 2.0661464}
+  m_Offset: {x: 0, y: -0.285}
+  m_Size: {x: 0.77, y: 2.09}
   m_Direction: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -840,4 +849,3 @@ SceneRoots:
   - {fileID: 619394802}
   - {fileID: 1779294191}
   - {fileID: 1772830887}
-  - {fileID: 643256586}

@@ -16,14 +16,34 @@ public class Player : MonoBehaviour
 
     public Player_JumpState jumpState { get; private set; }
     public Player_FallState fallState { get; private set; }
+    public Player_WallSlideState wallSlideState { get; private set; }
+    public Player_WallJumpState wallJumpState { get; private set; }
 
 
     [Header("Movement Details")]
     public float moveSpeed = 5f;
     public float jumpForce = 5f;
+    public Vector2 wallJumpForce;
+    [Tooltip("How many extra jumps allowed while airborne (e.g., 1 = double jump)")]
+    public int maxAirJumps { get; private set; } = 1;
 
+    [Range(0, 1)]
+    public float inAirMoveMultiplier = 0.7f;
+    [Range(0, 1)]
+    public float wallSlideMultiplier = 0.7f;
     public bool isFacingRight = true;
+    public int facingDir { get; private set; } = 1; //1 means facing right, -1 means facing left
     public Vector2 moveInput { get; private set; }
+
+    // Tracks remaining air jumps (resets when player touches ground or wall-jumps)
+    private int airJumpsRemaining;
+
+    [Header("Collision Detection")]
+    [SerializeField] private float groundCheckDistance;
+    [SerializeField] private float wallCheckDistance;
+    [SerializeField] private LayerMask whatIsGround;
+    public bool groundDetected { get; private set; }
+    public bool wallDetected { get; private set; }
 
     private void Awake()
     {
@@ -35,6 +55,8 @@ public class Player : MonoBehaviour
         moveState = new Player_MoveState(this, stateMachine, "move");
         jumpState = new Player_JumpState(this, stateMachine, "jumpFall");
         fallState = new Player_FallState(this, stateMachine, "jumpFall");
+        wallSlideState = new Player_WallSlideState(this, stateMachine, "wallSlide");
+        wallJumpState = new Player_WallJumpState(this, stateMachine, "jumpFall");
     }
     private void OnEnable()
     {
@@ -54,9 +76,11 @@ public class Player : MonoBehaviour
     private void Start()
     {
         stateMachine.Initialize(idleState);
+        ResetAirJumps();
     }
     private void Update()
     {
+        HandleCollisionDetection();
         stateMachine.UpdateActiveState();
     }
     public void SetVelocity(float xVelocity, float yVelocity)
@@ -70,9 +94,40 @@ public class Player : MonoBehaviour
         else if (xVelocity < 0 && isFacingRight) Flip();
 
     }
-    private void Flip()
+    public void Flip()
     {
         transform.Rotate(0f, 180f, 0f);
         isFacingRight = !isFacingRight;
+        facingDir *= -1;
     }
+    private void HandleCollisionDetection()
+    {
+        groundDetected = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround); // Check if the ground is detected below the player
+        wallDetected = Physics2D.Raycast(transform.position, Vector2.right * facingDir, wallCheckDistance, whatIsGround); // Check if a wall is detected in front of the player
+    }
+
+    // Resets the available air-jumps back to the configured maximum
+    public void ResetAirJumps()
+    {
+        airJumpsRemaining = maxAirJumps;
+    }
+
+    // Attempt to consume an air-jump. Returns true if there was an air-jump available and it was used.
+    public bool UseAirJump()
+    {
+        if (airJumpsRemaining > 0)
+        {
+            airJumpsRemaining--;
+            return true;
+        }
+        return false;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, transform.position + new Vector3(0, -groundCheckDistance));
+        Gizmos.DrawLine(transform.position, transform.position + new Vector3(wallCheckDistance * facingDir, 0));
+    }
+
 }
