@@ -18,7 +18,12 @@ public class Player : MonoBehaviour
     public Player_FallState fallState { get; private set; }
     public Player_WallSlideState wallSlideState { get; private set; }
     public Player_WallJumpState wallJumpState { get; private set; }
-
+    public Player_DashState dashState { get; private set; }
+    public Player_BasicAttackState basicAttackState { get; private set; }
+    [Header("Attack details")]
+    public Vector2[] attackVelocity;
+    public float attackVelocityDuration = .1f;
+    public float comboResetTime = 1f; // Time window to continue the combo
 
     [Header("Movement Details")]
     public float moveSpeed = 5f;
@@ -31,6 +36,9 @@ public class Player : MonoBehaviour
     public float inAirMoveMultiplier = 0.7f;
     [Range(0, 1)]
     public float wallSlideMultiplier = 0.7f;
+    [Space]
+    public float dashDuration = .25f;
+    public float dashSpeed = 20f;
     public bool isFacingRight = true;
     public int facingDir { get; private set; } = 1; //1 means facing right, -1 means facing left
     public Vector2 moveInput { get; private set; }
@@ -57,6 +65,8 @@ public class Player : MonoBehaviour
         fallState = new Player_FallState(this, stateMachine, "jumpFall");
         wallSlideState = new Player_WallSlideState(this, stateMachine, "wallSlide");
         wallJumpState = new Player_WallJumpState(this, stateMachine, "jumpFall");
+        dashState = new Player_DashState(this, stateMachine, "dash");
+        basicAttackState = new Player_BasicAttackState(this, stateMachine, "basicAttack");
     }
     private void OnEnable()
     {
@@ -82,6 +92,10 @@ public class Player : MonoBehaviour
     {
         HandleCollisionDetection();
         stateMachine.UpdateActiveState();
+    }
+    public void CallAnimationTrigger()
+    {
+        stateMachine.currentState.CallAnimationTrigger();
     }
     public void SetVelocity(float xVelocity, float yVelocity)
     {
