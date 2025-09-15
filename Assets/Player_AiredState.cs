@@ -11,7 +11,7 @@ public class Player_AiredState : EntityState
         base.Update();
         if (player.moveInput.x != 0)
         {
-            player.SetVelocity(player.moveInput.x * (player.moveSpeed *player.inAirMoveMultiplier), rb.linearVelocity.y); //Maintain horizontal velocity based on input
+            player.SetVelocity(player.moveInput.x * (player.moveSpeed * player.inAirMoveMultiplier), rb.linearVelocity.y); //Maintain horizontal velocity based on input
         }
 
         // Allow an additional air-jump (double-jump) if player has any remaining
@@ -24,6 +24,10 @@ public class Player_AiredState : EntityState
                 // optionally change state to jumpState to reuse Enter logic/animation
                 stateMachine.ChangeState(player.jumpState);
             }
+        }
+        if(input.Player.Attack.WasPressedThisFrame())
+        {
+            stateMachine.ChangeState(player.jumpAttackState);
         }
     }
 }

@@ -8,7 +8,7 @@ public class Player_DashState : EntityState
     public override void Enter()
     {
         base.Enter();
-        dashDir = player.facingDir;
+        dashDir = player.moveInput.x != 0 ? ((int)player.moveInput.x) : player.facingDir;
 
         stateTimer = player.dashDuration;
 
