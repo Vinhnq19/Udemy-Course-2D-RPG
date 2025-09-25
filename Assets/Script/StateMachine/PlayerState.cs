@@ -17,13 +17,19 @@ public abstract class PlayerState : EntityState
     public override void Update()
     {
         base.Update();
-        // Code to execute every frame while in this state
-        anim.SetFloat("yVelocity", rb.linearVelocity.y);
         //Make player dash when Left Shift is pressed
         if (input.Player.Dash.WasPressedThisFrame() && CanDash())
         {
             stateMachine.ChangeState(player.dashState);
         }
+    }
+
+    public override void UpdateAnimationParameters()
+    {
+        base.UpdateAnimationParameters();
+        // Code to execute every frame while in this state
+        anim.SetFloat("yVelocity", rb.linearVelocity.y);
+
     }
 
 
