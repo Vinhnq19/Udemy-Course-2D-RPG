@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Entity : MonoBehaviour
@@ -18,6 +19,10 @@ public class Entity : MonoBehaviour
     [SerializeField] private Transform secondaryWallCheck;
     public bool groundDetected { get; private set; }
     public bool wallDetected { get; private set; }
+
+    //Condition variables
+    private bool isKnocked;
+    private Coroutine knockbackCoroutine;
 
     protected virtual void Awake()
     {
@@ -41,6 +46,27 @@ public class Entity : MonoBehaviour
     public void CurrentStateAnimationTrigger()
     {
         stateMachine.currentState.AnimationTrigger();
+    }
+
+    public virtual void EntityDeath()
+    {
+        
+    }
+    public void ReceiveKnockback(Vector2 knockback, float duration)
+    {
+        if (knockbackCoroutine != null)
+            StopCoroutine(knockbackCoroutine);
+        knockbackCoroutine = StartCoroutine(KnockbackCo(knockback, duration));
+    }
+    public IEnumerator KnockbackCo(Vector2 knockback, float duration)
+    {
+        isKnocked = true;
+        Debug.Log("Knockback");
+        rb.linearVelocity = knockback;
+        yield return new WaitForSeconds(duration);
+        yield return null;
+        rb.linearVelocity = Vector2.zero;
+        isKnocked = false;
     }
     public void SetVelocity(float xVelocity, float yVelocity)
     {

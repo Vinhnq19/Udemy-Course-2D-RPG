@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class Enemy : Entity
 {
-    
+
     public Enemy_IdleState idleState;
     public Enemy_MoveState moveState;
     public Enemy_AttackState attackState;
     public Enemy_BattleState battleState;
+    public Enemy_DeathState deathState;
 
     [Header("Battle details")]
     public float battleMoveSpeed = 3;
@@ -28,11 +29,22 @@ public class Enemy : Entity
     [SerializeField] private float playerCheckDistance = 10;
     public Transform player { get; private set; }
 
+    public override void EntityDeath()
+    {
+        base.EntityDeath();
+        stateMachine.ChangeState(deathState);
+    }
+
+    private void HandlePlayerDeath()
+    {
+
+    }
+
     public void TryEnterBattleState(Transform player)
     {
-        if(stateMachine.currentState == battleState) return;
+        if (stateMachine.currentState == battleState) return;
 
-        if(stateMachine.currentState == attackState) return;
+        if (stateMachine.currentState == attackState) return;
         this.player = player;
         stateMachine.ChangeState(battleState);
     }
@@ -64,6 +76,16 @@ public class Enemy : Entity
         Gizmos.DrawLine(playerCheck.position, new Vector3(playerCheck.position.x + (facingDir * attackDistance), playerCheck.position.y));
         Gizmos.color = Color.cyan;
         Gizmos.DrawLine(playerCheck.position, new Vector3(playerCheck.position.x + (facingDir * minRetreatDistance), playerCheck.position.y));
+    }
+
+    private void OnEnable()
+    {
+        Player.OnPlayerDeath += HandlePlayerDeath;
+    }
+    
+    private void OnDisable()
+    {
+        Player.OnPlayerDeath -= HandlePlayerDeath;
     }
 
 }

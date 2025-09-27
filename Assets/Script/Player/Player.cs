@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : Entity
 {
+    public static event Action OnPlayerDeath; // Event triggered when the player dies
     public PlayerInputSet input { get; private set; }
 
     public Player_IdleState idleState { get; private set; }
@@ -16,6 +18,7 @@ public class Player : Entity
     public Player_DashState dashState { get; private set; }
     public Player_BasicAttackState basicAttackState { get; private set; }
     public Player_JumpAttackState jumpAttackState { get; private set; }
+    public Player_DeathState deathState { get; private set; }
 
     [Header("Attack details")]
     public Vector2[] attackVelocity;
@@ -57,6 +60,7 @@ public class Player : Entity
         dashState = new Player_DashState(this, stateMachine, "dash");
         basicAttackState = new Player_BasicAttackState(this, stateMachine, "basicAttack");
         jumpAttackState = new Player_JumpAttackState(this, stateMachine, "jumpAttack");
+        deathState = new Player_DeathState(this, stateMachine, "dead");
     }
 
     protected override void Start()
@@ -64,6 +68,14 @@ public class Player : Entity
         base.Start();
         stateMachine.Initialize(idleState);
         ResetAirJumps();
+    }
+
+    public override void EntityDeath()
+    {
+        base.EntityDeath();
+
+        OnPlayerDeath?.Invoke(); // Trigger the player death event
+        stateMachine.ChangeState(deathState);
     }
 
     private void OnEnable()
