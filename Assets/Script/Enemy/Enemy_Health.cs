@@ -3,16 +3,17 @@ using UnityEngine;
 public class Enemy_Health : Entity_Health
 {
     private Enemy enemy => GetComponent<Enemy>();
-    public override void TakeDamage(float damage, Transform damageDealer)
+    public override bool TakeDamage(float damage, float elementalDamage, ElementType elementType, Transform damageDealer)
     {
-        base.TakeDamage(damage, damageDealer);
-        
-        if(isDead) return;
-        
+        bool wasHit = base.TakeDamage(damage, elementalDamage, elementType, damageDealer);
+
+        if (!wasHit) return false;
+
         //if damageDealer is player, enter battle state
         if (damageDealer.GetComponent<Player>() != null)
         {
             enemy.TryEnterBattleState(damageDealer);
         }
+        return true;
     }
 }
