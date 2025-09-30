@@ -3,12 +3,13 @@ using UnityEngine;
 
 public class Entity_Stats : MonoBehaviour
 {
+    public Stat_ResourceGroup resources;
     public Stat maxHealth;
     public Stat_MajorGroup major;
     public Stat_OffensiveGroup offense;
     public Stat_DefendGroup defense;
 
-    public float GetPhysicalDamage(out bool isCrit)
+    public float GetPhysicalDamage(out bool isCrit, float scaleFactor = 1f)
     {
         float baseDamage = offense.damage.GetValue();
         float bonusDamage = major.strength.GetValue() * 2;
@@ -25,12 +26,12 @@ public class Entity_Stats : MonoBehaviour
         isCrit = Random.Range(0f, 100f) < totalCritChance;
         float damageResult = isCrit ? totalBaseDamage * totalCritPower : totalBaseDamage;
 
-        return damageResult;
+        return damageResult * scaleFactor;
     }
 
     public float GetMaxHp()
     {
-        float baseHp = maxHealth.GetValue();
+        float baseHp = resources.maxHealth.GetValue();
         float bonusHp = major.vitality.GetValue() * 5;
         return baseHp + bonusHp;
     }
@@ -66,7 +67,7 @@ public class Entity_Stats : MonoBehaviour
         //Total armor reduction percentage
         return offense.armorReduction.GetValue() / 100f; //Convert to percentage
     }
-    public float GetElementalDamage(out ElementType elementalType)
+    public float GetElementalDamage(out ElementType elementalType, float scaleFactor = 1)
     {
         float fireDamage = offense.fireDamage.GetValue();
         float iceDamage = offense.iceDamage.GetValue();
@@ -100,7 +101,7 @@ public class Entity_Stats : MonoBehaviour
 
         float weakerElementsDamage = bonusFire + bonusIce + bonusLightning;
         float finalDamage = highestDamage + bonusElementalDamage + weakerElementsDamage;
-        return finalDamage;
+        return finalDamage * scaleFactor;
     }
     public float GetElementalResistance(ElementType elementType)
     {
@@ -124,5 +125,32 @@ public class Entity_Stats : MonoBehaviour
         float resistanceCap = 75f; //Resistance cannot exceed 75%
         float finalResistance = Mathf.Clamp(resistance, 0f, resistanceCap) / 100;
         return finalResistance;
+    }
+
+    public Stat GetStatByType(StatType statType)
+    {
+        switch (statType)
+        {
+            case StatType.MaxHealth: return resources.maxHealth;
+            case StatType.HealthRegen:    return resources.healthRegen;
+            case StatType.Strength: return major.strength;
+            case StatType.Agility: return major.agility;
+            case StatType.Intelligence: return major.intelligence;
+            case StatType.Vitality: return major.vitality;
+            case StatType.AttackSpeed: return offense.attackSpeed;
+            case StatType.Damage: return offense.damage;
+            case StatType.CritChance: return offense.critChance;
+            case StatType.CritPower: return offense.critPower;
+            case StatType.ArmorReduction: return offense.armorReduction;
+            case StatType.FireDamage: return offense.fireDamage;
+            case StatType.IceDamage: return offense.iceDamage;
+            case StatType.LightningDamage: return offense.lightningDamage;
+            case StatType.Armor: return defense.armor;
+            case StatType.Evasion: return defense.evasion;
+            case StatType.FireResistance: return defense.fireRes;
+            case StatType.IceResistance: return defense.iceRes;
+            case StatType.LightningResistance: return defense.lightningRes;
+            default: return null;
+        }
     }
 }

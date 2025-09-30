@@ -7,8 +7,13 @@ public class Entity_Health : MonoBehaviour, IDamagable
     private Entity_VFX entityVFX;
     private Entity entity;
     private Entity_Stats entityStats;
+
+
     [SerializeField] protected float currentHp;
     [SerializeField] protected bool isDead;
+    [Header("Health Regeneration")]
+    [SerializeField] private float regenInverval = 1;
+    [SerializeField] private bool canRenerateHealth = false;
 
     [Header("On Damage Knockback")]
     [SerializeField] private Vector2 knockbackPower = new Vector2(1.5f, 2.5f);
@@ -28,6 +33,8 @@ public class Entity_Health : MonoBehaviour, IDamagable
 
         currentHp = entityStats.GetMaxHp();
         UpdateHealthBar();
+
+        InvokeRepeating("RegenerateHealth", 0, regenInverval);
     }
 
     public virtual bool TakeDamage(float damage, float elementalDamage, ElementType elementType, Transform damageDealer)
@@ -50,7 +57,7 @@ public class Entity_Health : MonoBehaviour, IDamagable
         float elementalDamageTaken = elementalDamage * (1 - resistance);
         TakeKnockback(damageDealer, physicalDamageTaken);
         //Knockback
-        ReduceHp(physicalDamageTaken + elementalDamageTaken);
+        ReduceHealth(physicalDamageTaken + elementalDamageTaken);
         return true;
     }
 
@@ -67,7 +74,22 @@ public class Entity_Health : MonoBehaviour, IDamagable
         return Random.Range(0f, 100f) < entityStats.GetEvasion();
     }
 
-    protected void ReduceHp(float damage)
+private void RegenerateHealth()
+    {
+        if (!canRenerateHealth) return;
+        float regenAmount = entityStats.resources.healthRegen.GetValue();
+        IncreaseHealth(regenAmount);
+    }
+    public void IncreaseHealth(float healAmount)
+    {
+        if (isDead) return;
+        float newHealth = currentHp + healAmount;
+        float maxHealth = entityStats.GetMaxHp();
+
+        currentHp = Mathf.Min(newHealth, maxHealth);
+        UpdateHealthBar();
+    }
+    public void ReduceHealth(float damage)
     {
         entityVFX.PlayOnDamageVFX();
         currentHp -= (int)damage;
