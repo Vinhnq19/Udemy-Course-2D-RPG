@@ -12,7 +12,7 @@ public class Stat
     private float finalValue;
     public float GetValue()
     {
-        if(needToBeRecalculated)
+        if (needToBeRecalculated)
         {
             finalValue = GetFinalValue();
             needToBeRecalculated = false;
@@ -41,7 +41,11 @@ public class Stat
         float finalValue = baseValue;
         modifiers.ForEach(modifier => finalValue += modifier.value);
         return finalValue;
+
     }
+    
+    public void SetBaseValue(float value) => baseValue = value;
+
 
 }
 [Serializable]
