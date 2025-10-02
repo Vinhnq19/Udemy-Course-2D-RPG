@@ -5,7 +5,7 @@ public class UI_ToolTip : MonoBehaviour
     private RectTransform rectTransform;
     [SerializeField] private Vector2 offset = new Vector2(300, 20);
 
-    private void Awake()
+    protected virtual void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
     }
@@ -30,15 +30,20 @@ public class UI_ToolTip : MonoBehaviour
         float verticalHalf = rectTransform.sizeDelta.y / 2f;
         float topY = targetPosition.y + verticalHalf;
         float bottomY = targetPosition.y - verticalHalf;
-        if(topY > screenTop)
+        if (topY > screenTop)
         {
             targetPosition.y = screenTop - verticalHalf - offset.y;
         }
-        else if(bottomY < screenBottom)
+        else if (bottomY < screenBottom)
         {
             targetPosition.y = screenBottom + verticalHalf + offset.y;
         }
         rectTransform.position = targetPosition;
 
     }
+    protected string GetColorText(string color, string text)
+    {
+        return $"<color={color}>{text}</color>";
+    }
+
 }

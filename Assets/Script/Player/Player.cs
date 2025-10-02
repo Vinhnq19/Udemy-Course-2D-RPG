@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Player : Entity
 {
+    private UI ui;
     public static event Action OnPlayerDeath; // Event triggered when the player dies
     public PlayerInputSet input { get; private set; }
 
@@ -51,6 +52,7 @@ public class Player : Entity
     protected override void Awake()
     {
         base.Awake();
+        ui = FindAnyObjectByType<UI>();
         input = new PlayerInputSet();
         idleState = new Player_IdleState(this, stateMachine, "idle");
         moveState = new Player_MoveState(this, stateMachine, "move");
@@ -125,6 +127,7 @@ public class Player : Entity
 
         input.Player.Movement.performed += ctx => moveInput = ctx.ReadValue<Vector2>(); //Read the value of the movement input as a Vector2
         input.Player.Movement.canceled += ctx => moveInput = Vector2.zero; //When the movement input is canceled, set moveInput to zero
+        input.Player.ToggleSkillTreeUI.performed += ctx => ui.ToggleSkillTreeUI(); // Toggle the skill tree UI when the input action is performed
 
     }
     private void OnDisable()
