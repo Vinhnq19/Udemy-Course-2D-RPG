@@ -50,7 +50,7 @@ public class UI_TreeConnectHandler : MonoBehaviour
             if (detail.chillNode == null) continue;
             detail.chillNode.SetPosition(targetPosition);
             detail.chillNode.SetConnectionImage(connectionImage);
-            detail.chillNode.transform.SetAsLastSibling(); // Ensure child nodes are rendered above connections
+            //detail.chillNode.transform.SetAsLastSibling(); // Ensure child nodes are rendered above connections
         }
     }
 
