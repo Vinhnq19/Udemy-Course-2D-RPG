@@ -30,6 +30,16 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         skillTree = GetComponentInParent<UI_SkillTree>();
         connectHandler = GetComponent<UI_TreeConnectHandler>();
         UpdateIconColor(GetColorByHex(lockedColorHex));
+
+    }
+
+    private void Start()
+    {
+        if(skillData.unlockedByDefault)
+        {
+            Unlock();
+        }
+    
     }
 
     public void Refund()
@@ -52,6 +62,7 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         skillTree.playerSkillManager.GetSkillByType(skillData.skillType).SetSkillUpgrade(skillData.upgradeData);
     }
+
 
     private bool CanBeUnlocked()
     {
@@ -78,6 +89,15 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         foreach (var node in conflictNodes)
         {
             node.isLocked = true;
+            node.LockChildNodes();
+        }
+    }
+    private void LockChildNodes()
+    {
+        isLocked = true;
+        foreach (var node in connectHandler.GetChildNodes())
+        {
+            node.LockChildNodes();
         }
     }
 

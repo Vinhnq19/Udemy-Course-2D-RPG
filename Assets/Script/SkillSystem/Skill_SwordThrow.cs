@@ -1,0 +1,90 @@
+using UnityEngine;
+
+public class Skill_SwordThrow : Skill_Base
+{
+    private Skill_ObjectSword currentSword;
+    [Header("Regular Sword Upgrade")]
+    [SerializeField] private GameObject swordPrefab;
+    [Range(0.1f, 10f)]
+    [SerializeField] private float throwPower = 5f;
+
+    [Header("Trajectory prediction")]
+    [SerializeField] private GameObject predictionDot;
+    [SerializeField] private int numberOfPredictionDots = 20;
+    [SerializeField] private float spaceBetweenPredictionDots = 0.05f;
+    private float swordGravity = 3.5f;
+    private Transform[] dots;
+    private Vector2 confirmDirection;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        swordGravity = swordPrefab.GetComponent<Rigidbody2D>().gravityScale;
+        dots = GenerateDots();
+    }
+
+    public override bool CanUseSkill()
+    {
+        if (currentSword != null)
+        {
+            currentSword.GetSwordBackToPlayer();
+            return false;
+        }
+        return base.CanUseSkill();
+    }
+    
+    public void ThrowSword()
+    {
+        GameObject newSword = Instantiate(swordPrefab, dots[1].position, Quaternion.identity);
+
+        currentSword = newSword.GetComponent<Skill_ObjectSword>();
+        currentSword.SetupSword(this, GetThrowPower());
+    }
+
+    private Vector2 GetThrowPower() => confirmDirection * (throwPower * 10);
+
+    public void PredictTrajectory(Vector2 direction)
+    {
+        for (int i = 0; i < dots.Length; i++)
+        {
+            dots[i].position = GetTrajectoryPoint(direction, i * spaceBetweenPredictionDots);
+        }
+    }
+    private Vector2 GetTrajectoryPoint(Vector2 direction, float t)
+    {
+        float scaledThrowPower = throwPower * 10;
+
+        Vector2 initialVelocity = direction * scaledThrowPower;
+        Vector2 gravityEffect = 0.5f * Physics2D.gravity * swordGravity * (t * t);
+
+        Vector2 predictedPoint = (initialVelocity * t) + gravityEffect;
+
+        Vector2 playerPosition = transform.root.position;
+        return playerPosition + predictedPoint;
+
+    }
+
+    public void ConfirmTrajectory(Vector2 direction)
+    {
+        confirmDirection = direction.normalized;
+    }
+
+    public void EnableDots(bool enable)
+    {
+        foreach (Transform t in dots)
+        {
+            t.gameObject.SetActive(enable);
+        }
+    }
+
+    private Transform[] GenerateDots()
+    {
+        Transform[] newDots = new Transform[numberOfPredictionDots];
+        for (int i = 0; i < numberOfPredictionDots; i++)
+        {
+            newDots[i] = Instantiate(predictionDot, transform.position, Quaternion.identity, transform).transform;
+            newDots[i].gameObject.SetActive(false);
+        }
+        return newDots;
+    }
+}

@@ -29,7 +29,7 @@ public class Skill_Dash : Skill_Base
     }
     private void CreateShard()
     {
-        Debug.Log("Dash");
+        skillManager.shard.CreateRawShard();
     }
 
     private void CreateClone()

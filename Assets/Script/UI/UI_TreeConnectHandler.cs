@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Collections.Generic;
 
 [Serializable]
 
@@ -27,6 +28,19 @@ public class UI_TreeConnectHandler : MonoBehaviour
         originalColor = connectionImage.color;
     }
 
+    public UI_TreeNode[] GetChildNodes()
+    {
+        List<UI_TreeNode> childrenToReturn = new List<UI_TreeNode>();
+        foreach (var node in details)
+        {
+            if (node.chillNode != null)
+            {
+                childrenToReturn.Add(node.chillNode.GetComponent<UI_TreeNode>());
+            }
+        }
+        return childrenToReturn.ToArray();
+    }
+
     private void OnValidate()
     {
         if (details.Length <= 0) return;
@@ -50,7 +64,7 @@ public class UI_TreeConnectHandler : MonoBehaviour
             if (detail.chillNode == null) continue;
             detail.chillNode.SetPosition(targetPosition);
             detail.chillNode.SetConnectionImage(connectionImage);
-            //detail.chillNode.transform.SetAsLastSibling(); // Ensure child nodes are rendered above connections
+            detail.chillNode.transform.SetAsLastSibling(); // Ensure child nodes are rendered above connections
         }
     }
 

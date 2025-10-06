@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class Entity_StatusHandler : MonoBehaviour
@@ -23,6 +22,21 @@ public class Entity_StatusHandler : MonoBehaviour
         health = GetComponent<Entity_Health>();
         vfx = GetComponent<Entity_VFX>();
         stats = GetComponent<Entity_Stats>();
+    }
+    public void ApplyStatusEffect(ElementType elementType, ElementalEffectData effectData)
+    {
+        if(elementType == ElementType.Ice && CanBeApplied(ElementType.Ice))
+        {
+            ApplyChillEffect(effectData.chillDuration, effectData.chillSlowMultiplier);
+        }
+        else if(elementType == ElementType.Fire && CanBeApplied(ElementType.Fire))
+        {
+            ApplyBurnEffect(effectData.burnDuration, effectData.burnDamage);
+        }
+        else if(elementType == ElementType.Lightning && CanBeApplied(ElementType.Lightning))
+        {
+            ApplyElectricityEffect(effectData.shockDuration, effectData.shockDamage, effectData.shockCharge);
+        }
     }
     public void ApplyElectricityEffect(float duration, float eletricDamage, float charge)
     {

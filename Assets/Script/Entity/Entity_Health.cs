@@ -105,6 +105,14 @@ private void RegenerateHealth()
         entity.EntityDeath();
     }
 
+    public float GetHealthPercent() => currentHp / entityStats.GetMaxHp();
+
+public void SetHealthToPercent(float percent)
+    {
+        percent = Mathf.Clamp01(percent);
+        currentHp = entityStats.GetMaxHp() * percent;
+        UpdateHealthBar();
+    }
     private void UpdateHealthBar()
     {
         if (healthBar == null)

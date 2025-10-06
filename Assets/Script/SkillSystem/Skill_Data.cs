@@ -7,6 +7,7 @@ using System;
 public class Skill_Data : ScriptableObject
 {
     public int cost;
+    public bool unlockedByDefault;
     public SkillType skillType;
     public UpgradeData upgradeData;
 
@@ -22,6 +23,7 @@ public class UpgradeData
 {
     public SkillUpgradeType upgradeType;
     public float cooldown;
+    public DamageScaleData damageScaleData;
 
 }
 

@@ -11,6 +11,8 @@ public class Player : Entity
     public PlayerInputSet input { get; private set; }
     public PlayerSkillManager skillManager { get; private set; }
     public Player_VFX playerVFX { get; private set; }
+    public Entity_Health health { get; private set; }
+    public Entity_StatusHandler statusHandler { get; private set; }
 
     #region  States
     public Player_IdleState idleState { get; private set; }
@@ -25,6 +27,7 @@ public class Player : Entity
     public Player_JumpAttackState jumpAttackState { get; private set; }
     public Player_DeathState deathState { get; private set; }
     public Player_CounterAttackState counterAttackState { get; private set; }
+    public Player_SwordThrowState swordThrowState { get; private set; }
     #endregion
 
     [Header("Attack details")]
@@ -50,6 +53,7 @@ public class Player : Entity
     public float dashSpeed = 20f;
 
     public Vector2 moveInput { get; private set; }
+    public Vector2 mousePosition { get; private set; }
 
     // Tracks remaining air jumps (resets when player touches ground or wall-jumps)
     private int airJumpsRemaining;
@@ -61,6 +65,8 @@ public class Player : Entity
         input = new PlayerInputSet();
         skillManager = GetComponent<PlayerSkillManager>();
         playerVFX = GetComponent<Player_VFX>();
+        statusHandler = GetComponent<Entity_StatusHandler>();
+        health = GetComponent<Entity_Health>();
 
 
         idleState = new Player_IdleState(this, stateMachine, "idle");
@@ -74,6 +80,7 @@ public class Player : Entity
         jumpAttackState = new Player_JumpAttackState(this, stateMachine, "jumpAttack");
         deathState = new Player_DeathState(this, stateMachine, "dead");
         counterAttackState = new Player_CounterAttackState(this, stateMachine, "counterAttack");
+        swordThrowState = new Player_SwordThrowState(this, stateMachine, "swordThrow");
     }
 
     protected override void Start()
@@ -82,6 +89,8 @@ public class Player : Entity
         stateMachine.Initialize(idleState);
         ResetAirJumps();
     }
+    
+    public void TeleportPlayer(Vector3 position) => transform.position = position;
 
     protected override IEnumerator SlowdownEntityCo(float duration, float slowMultiplier)
     {
@@ -90,7 +99,7 @@ public class Player : Entity
         float originalAnimSpeed = anim.speed;
         Vector2 originalWallJump = wallJumpForce;
         Vector2 originalJumpAttack = jumpAttackVelocity;
-        Vector2[] originalAttackVelocity =  new Vector2[attackVelocity.Length];
+        Vector2[] originalAttackVelocity = new Vector2[attackVelocity.Length];
         Array.Copy(attackVelocity, originalAttackVelocity, attackVelocity.Length);
 
         float speedMultiplier = 1 - slowMultiplier;
@@ -101,7 +110,7 @@ public class Player : Entity
         wallJumpForce = wallJumpForce * speedMultiplier;
         jumpAttackVelocity = jumpAttackVelocity * speedMultiplier;
 
-        for(int i = 0; i < attackVelocity.Length; i++)
+        for (int i = 0; i < attackVelocity.Length; i++)
         {
             attackVelocity[i] = attackVelocity[i] * speedMultiplier;
         }
@@ -112,7 +121,7 @@ public class Player : Entity
         wallJumpForce = originalWallJump;
         jumpAttackVelocity = originalJumpAttack;
         anim.speed = originalAnimSpeed;
-        
+
         for (int i = 0; i < attackVelocity.Length; i++)
         {
             attackVelocity[i] = originalAttackVelocity[i];
@@ -134,10 +143,11 @@ public class Player : Entity
         // input.Player.Movement.canceled; //When the move action is canceled (e.g., when the key is released)
         // input.Player.Movement.performed; //When the move action is performed
 
+        input.Player.Mouse.performed += ctx => mousePosition = ctx.ReadValue<Vector2>(); // Read the value of the mouse position input as a Vector2
         input.Player.Movement.performed += ctx => moveInput = ctx.ReadValue<Vector2>(); //Read the value of the movement input as a Vector2
         input.Player.Movement.canceled += ctx => moveInput = Vector2.zero; //When the movement input is canceled, set moveInput to zero
         input.Player.ToggleSkillTreeUI.performed += ctx => ui.ToggleSkillTreeUI(); // Toggle the skill tree UI when the input action is performed
-        input.Player.Spell.performed += ctx => skillManager.shard.CreateShard();
+        input.Player.Spell.performed += ctx => skillManager.shard.TryUseSkill();
 
     }
     private void OnDisable()

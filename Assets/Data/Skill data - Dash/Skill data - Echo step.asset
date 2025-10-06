@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: Skill data - Echo step
   m_EditorClassIdentifier: 
   cost: 2
+  unlockedByDefault: 0
   skillType: 0
   upgradeData:
-    upgradeType: 1
+    upgradeType: 2
     cooldown: 2
   displayName: Echo step
   description: 'Create a time echo before you dash.
 
-    (Inherits all upgrades
-    of Tine ech Ability)'
+    (Inherits all upgrades of
+    Tine ech Ability)'
   icon: {fileID: -1996505115, guid: 5879ebae7c1037f428c0c8571184fc57, type: 3}

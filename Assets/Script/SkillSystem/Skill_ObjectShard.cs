@@ -1,18 +1,60 @@
+using System;
 using UnityEngine;
 
 public class Skill_ObjectShard : Skill_ObjectBase
 {
+    public event Action OnExplode;
+    private Skill_Shard shardManager;
     [SerializeField] private GameObject vfxPrefab;
 
-    public void SetupShard(float detinationTime)
+    private Transform target;
+    private float speed;
+
+    private void Update()
     {
-        Invoke(nameof(Explode), detinationTime);
+        if (target == null)
+            return;
+        transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
     }
 
-    private void Explode()
+    public void MoveTowardsClosestTarget(float moveSpeed)
+    {
+        target = ClostestTarget();
+        this.speed = moveSpeed;
+    }
+
+    public void SetupShard(Skill_Shard shardManager)
+    {
+        this.shardManager = shardManager;
+
+        playerStats = shardManager.player.stats;
+        damageScaleData = shardManager.damageScaleData;
+        float detonationTime = shardManager.GetDetonateTime();
+        Invoke(nameof(Explode), detonationTime);
+    }
+
+    public void SetupShard(Skill_Shard shardManager, float detonateTime, bool canMove, float shardSpeed)
+    {
+        this.shardManager = shardManager;
+
+        playerStats = shardManager.player.stats;
+        damageScaleData = shardManager.damageScaleData;
+        Invoke(nameof(Explode), detonateTime);
+        
+        if(canMove)
+        {
+            MoveTowardsClosestTarget(shardSpeed);
+        }
+
+    }
+
+    public void Explode()
     {
         DamageEnemiesInRadius(transform, targetCheckRadius);
-        Instantiate(vfxPrefab, transform.position, Quaternion.identity);
+        GameObject vfx = Instantiate(vfxPrefab, transform.position, Quaternion.identity);
+        vfx.GetComponentInChildren<SpriteRenderer>().color = shardManager.player.playerVFX.GetElementColor(usedElement);
+
+        OnExplode?.Invoke();
         Destroy(gameObject);
     }
  

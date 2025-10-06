@@ -79,6 +79,7 @@ public class UI_SkillToolTip : UI_ToolTip
         sb.AppendLine(finalCostText);
         foreach (var node in neededNodes)
         {
+            if(node == null) continue;
             string nodeColor = node.isUnlocked ? metConditionHex : notMetConditionHex;
             string nodeText = $"- {node.skillData.displayName}";
             string finalNodeText = GetColorText(nodeColor, nodeText);

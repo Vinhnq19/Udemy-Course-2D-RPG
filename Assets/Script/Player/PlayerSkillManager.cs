@@ -4,11 +4,13 @@ public class PlayerSkillManager : MonoBehaviour
 {
     public Skill_Dash dash { get; private set; }
     public Skill_Shard shard { get; private set; }
+    public Skill_SwordThrow swordThrow { get; private set; }
 
     private void Awake()
     {
         dash = GetComponentInChildren<Skill_Dash>();
         shard = GetComponentInChildren<Skill_Shard>();
+        swordThrow = GetComponentInChildren<Skill_SwordThrow>();
     }
 
     public Skill_Base GetSkillByType(SkillType type)
@@ -16,6 +18,7 @@ public class PlayerSkillManager : MonoBehaviour
         switch (type)
         {
             case SkillType.Dash: return dash;
+            case SkillType.TimeShard: return shard;
             default:
                 Debug.Log($"Skill type {type} not found.");
                 return null;

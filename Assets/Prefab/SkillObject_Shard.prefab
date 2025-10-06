@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1488103437
   m_SortingLayer: -1
-  m_SortingOrder: -2
+  m_SortingOrder: 1
   m_Sprite: {fileID: 5293031974318352618, guid: 965811bd1c6dc694685485683493cc8f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -156,6 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b523008e5d213c041959c42bfd09ba77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHitVfx: {fileID: 6450270640677023496, guid: e83e81dd1cd2b0847a300a9bd490d9a1, type: 3}
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 256

@@ -68,13 +68,12 @@ public class Entity_VFX : MonoBehaviour
 
         sr.color = Color.white;
     }
-    public void CreateHitVFX(Transform target, bool isCrit)
+    public void CreateHitVFX(Transform target, bool isCrit, ElementType element)
     {
         GameObject hitPrefab = isCrit ? critHitVfx : hitVfx;
         GameObject vfx = Instantiate(hitPrefab, target.position, Quaternion.identity);
 
-        if (!isCrit)
-            vfx.GetComponentInChildren<SpriteRenderer>().color = hitVfxColor;
+            vfx.GetComponentInChildren<SpriteRenderer>().color = GetElementColor(element);
 
         if (entity != null && entity.facingDir == -1)
         {
@@ -85,12 +84,19 @@ public class Entity_VFX : MonoBehaviour
         }
     }
 
-    public void UpdateOnHitColor(ElementType element)
+    public Color GetElementColor(ElementType element)
     {
-        if (element == ElementType.Ice)
-            hitVfxColor = chillVfx;
-        if (element == ElementType.None)
-            hitVfxColor = originalHitVfxColor;
+        switch (element)
+        {
+            case ElementType.Ice:
+                return chillVfx;
+            case ElementType.Fire:
+                return burnVfx;
+            case ElementType.Lightning:
+                return eletricVfx;
+            default:
+                return Color.white;
+        }
     }
     public void PlayOnDamageVFX()
     {
