@@ -7,10 +7,19 @@ public class Skill_ObjectBase : MonoBehaviour
     [SerializeField] protected Transform targetCheck;
     [SerializeField] protected float targetCheckRadius = 1;
 
+    protected Rigidbody2D rb;
+
+    protected Animator anim;
     protected Entity_Stats playerStats;
     protected DamageScaleData damageScaleData;
     protected ElementType usedElement;
     protected bool targetGotHit;
+
+    protected virtual void Awake()
+    {
+        anim = GetComponentInChildren<Animator>();
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     protected void DamageEnemiesInRadius(Transform t, float radius)
     {
@@ -30,7 +39,7 @@ public class Skill_ObjectBase : MonoBehaviour
             {
                 target.GetComponent<Entity_StatusHandler>().ApplyStatusEffect(elementType, elementalEffectData);
             }
-            if(targetGotHit)
+            if (targetGotHit)
             {
                 Instantiate(onHitVfx, target.transform.position, Quaternion.identity);
             }

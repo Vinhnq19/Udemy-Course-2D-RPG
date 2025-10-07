@@ -3,13 +3,12 @@ using UnityEngine;
 public class Skill_ObjectSword : Skill_ObjectBase
 {
     protected Skill_SwordThrow swordManager;
-    protected Rigidbody2D rb;
     protected Transform playerTransform;
     protected bool shouldComeback;
     protected float comebackSpeed = 20f;
     protected float maxAllowedDistance = 25f;
 
-    private void Update()
+    protected virtual void Update()
     {
         transform.right = rb.linearVelocity;
         HandleComeback();
@@ -17,7 +16,6 @@ public class Skill_ObjectSword : Skill_ObjectBase
 
     public virtual void SetupSword(Skill_SwordThrow swordManager, Vector2 direction)
     {
-        rb = GetComponent<Rigidbody2D>();
         rb.linearVelocity = direction;
         this.swordManager = swordManager;
 

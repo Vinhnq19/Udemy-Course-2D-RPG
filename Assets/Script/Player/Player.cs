@@ -148,6 +148,7 @@ public class Player : Entity
         input.Player.Movement.canceled += ctx => moveInput = Vector2.zero; //When the movement input is canceled, set moveInput to zero
         input.Player.ToggleSkillTreeUI.performed += ctx => ui.ToggleSkillTreeUI(); // Toggle the skill tree UI when the input action is performed
         input.Player.Spell.performed += ctx => skillManager.shard.TryUseSkill();
+        input.Player.Spell.performed += ctx => skillManager.timeEcho.TryUseSkill();
 
     }
     private void OnDisable()

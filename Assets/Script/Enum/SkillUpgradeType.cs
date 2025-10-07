@@ -21,7 +21,15 @@ public enum SkillUpgradeType
     SwordThrow,
     SwordThrow_Spin,
     SwordThrow_Pierce,
-    SwordThrow_Bounce
+    SwordThrow_Bounce,
 
+    // Time Echo Tree
+    TimeEcho,
+    TimeEcho_SingleAttack,
+    TimeEcho_MultiAttack,
+    TimeEcho_ChanceToMultiply,
+    TimeEcho_HealWisp,
+    TimeEcho_CleanseWisp,
+    TimeEcho_CooldownWisp
 
 }

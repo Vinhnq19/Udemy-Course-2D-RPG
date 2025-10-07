@@ -209,7 +209,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -2013388068, guid: 5879ebae7c1037f428c0c8571184fc57, type: 3}
+  m_Sprite: {fileID: -1839291918, guid: 5879ebae7c1037f428c0c8571184fc57, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -931,7 +931,7 @@ GameObject:
   - component: {fileID: 55527102}
   - component: {fileID: 55527101}
   m_Layer: 5
-  m_Name: UI_TreeNode - Phamtom Recall
+  m_Name: UI_TreeNode - The bullet sword
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -998,11 +998,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   neededNodes:
   - {fileID: 1180548447}
-  conflictNodes: []
+  conflictNodes:
+  - {fileID: 1183253451}
+  - {fileID: 2040333576}
   isUnlocked: 0
   isLocked: 0
-  skillData: {fileID: 11400000, guid: 1a349a145f93afd40a2cb70268da0bed, type: 2}
-  skillName: Phamtom Recall
+  skillData: {fileID: 11400000, guid: 90abd4cde2911a341af88da339801f97, type: 2}
+  skillName: The bullet sword
   skillIcon: {fileID: 1045203984}
   skillCost: 2
   lockedColorHex: '#9F9797'
@@ -1223,7 +1225,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 501450107, guid: 5879ebae7c1037f428c0c8571184fc57, type: 3}
+  m_Sprite: {fileID: 910739483, guid: 5879ebae7c1037f428c0c8571184fc57, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1531,7 +1533,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &213585579
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1572,6 +1574,7 @@ MonoBehaviour:
   - {fileID: 366797906}
   - {fileID: 1011553752}
   - {fileID: 1653246792}
+  - {fileID: 1180548448}
 --- !u!1 &229607009
 GameObject:
   m_ObjectHideFlags: 0
@@ -6752,7 +6755,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -2013388068, guid: 5879ebae7c1037f428c0c8571184fc57, type: 3}
+  m_Sprite: {fileID: 1320657027, guid: 5879ebae7c1037f428c0c8571184fc57, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8163,7 +8166,7 @@ GameObject:
   - component: {fileID: 1183253451}
   - component: {fileID: 1183253450}
   m_Layer: 5
-  m_Name: UI_TreeNode - Irritated shard
+  m_Name: UI_TreeNode - The chainsaw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8208,11 +8211,12 @@ MonoBehaviour:
   neededNodes:
   - {fileID: 1180548447}
   conflictNodes:
-  - {fileID: 366797905}
+  - {fileID: 55527102}
+  - {fileID: 2040333576}
   isUnlocked: 0
   isLocked: 0
-  skillData: {fileID: 11400000, guid: 944363db24818864b8462b54c7d48117, type: 2}
-  skillName: Irritated shard
+  skillData: {fileID: 11400000, guid: da7cbb6b288361942af9abdb1b5d4c5e, type: 2}
+  skillName: The chainsaw
   skillIcon: {fileID: 124491520}
   skillCost: 2
   lockedColorHex: '#9F9797'
@@ -13789,6 +13793,7 @@ GameObject:
   - component: {fileID: 1925586038}
   - component: {fileID: 1925586039}
   - component: {fileID: 1925586040}
+  - component: {fileID: 1925586041}
   m_Layer: 7
   m_Name: Skills_Holder
   m_TagString: Untagged
@@ -13862,13 +13867,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillType: 3
-  upgradeType: 11
+  upgradeType: 14
   coolDown: 0
   swordPrefab: {fileID: 8274120326712029386, guid: b8f389ccde9f1c343b5d66f3f1a4fab9, type: 3}
-  throwPower: 2
+  throwPower: 2.75
+  pierceSwordPrefab: {fileID: 7780669908923210537, guid: 588ecc0ada176f641bfb13211872cca8, type: 3}
+  pierceAmount: 3
+  pierceThrowPower: 6.46
+  spinSwordPrefab: {fileID: 600830817887337958, guid: 5a01100e8c479d14fb8296f13a012207, type: 3}
+  maxDistance: 5
+  attackPerSecond: 6
+  spinDuration: 3
+  spinThrowPower: 4
+  bounceSwordPrefab: {fileID: 7382430442440569235, guid: 9896afd2502c6d0458f862725340810f, type: 3}
+  bounceCount: 5
+  bounceSpeed: 12
+  bounceThrowPower: 4.55
   predictionDot: {fileID: 4966854716937930902, guid: 10c756e4955b3f549bd379878f6b8f9e, type: 3}
   numberOfPredictionDots: 20
   spaceBetweenPredictionDots: 0.05
+--- !u!114 &1925586041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1925586036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e2a36003f7df534c9d2bffef31d373b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillType: 0
+  upgradeType: 15
+  coolDown: 4
+  timeEchoPrefab: {fileID: 6558507583179693870, guid: b4e360e31f1d6754a98e006b64859ffc, type: 3}
+  timeEchoDuration: 10
 --- !u!1 &1939685565
 GameObject:
   m_ObjectHideFlags: 0
@@ -15049,7 +15083,7 @@ GameObject:
   - component: {fileID: 2040333576}
   - component: {fileID: 2040333575}
   m_Layer: 5
-  m_Name: UI_TreeNode - Phamtom Recall
+  m_Name: UI_TreeNode - The Xenablade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15093,11 +15127,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   neededNodes:
   - {fileID: 1180548447}
-  conflictNodes: []
+  conflictNodes:
+  - {fileID: 1183253451}
+  - {fileID: 55527102}
   isUnlocked: 0
   isLocked: 0
-  skillData: {fileID: 11400000, guid: 1a349a145f93afd40a2cb70268da0bed, type: 2}
-  skillName: Phamtom Recall
+  skillData: {fileID: 11400000, guid: e8c853c091f862946982a7b62899d2f9, type: 2}
+  skillName: The Xenablade
   skillIcon: {fileID: 15503096}
   skillCost: 2
   lockedColorHex: '#9F9797'

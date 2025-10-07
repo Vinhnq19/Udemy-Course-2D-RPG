@@ -5,6 +5,7 @@ using UnityEngine.XR;
 public class Enemy_BattleState : EnemyState
 {
     private Transform player;
+    private Transform lastTarget;
     private float lastTimeWasInBattle;
     public Enemy_BattleState(Enemy enemy, StateMachine stateMachine, string animBoolName) : base(enemy, stateMachine, animBoolName)
     {
@@ -19,10 +20,10 @@ public class Enemy_BattleState : EnemyState
             player = enemy.GetPlayerReference();
 
         if (ShouldRetreat())
-            {
-                rb.linearVelocity = new Vector2(enemy.retreatVelocity.x * -DirectionToPlayer(), enemy.retreatVelocity.y);
-                enemy.HandleFlip(DirectionToPlayer());
-            }
+        {
+            rb.linearVelocity = new Vector2(enemy.retreatVelocity.x * -DirectionToPlayer(), enemy.retreatVelocity.y);
+            enemy.HandleFlip(DirectionToPlayer());
+        }
     }
 
     public override void Update()
@@ -30,8 +31,11 @@ public class Enemy_BattleState : EnemyState
         base.Update();
 
         if (enemy.PlayerDetected())
+        {
+            UpdateTargetIfNeeded();
             UpdateBattleTimer();
-            
+        }
+
         if (BattleTimeIsOver())
             stateMachine.ChangeState(enemy.idleState);
         if (WithinAttackRange() && enemy.PlayerDetected() == true)
@@ -40,6 +44,18 @@ public class Enemy_BattleState : EnemyState
         }
         else enemy.SetVelocity(enemy.battleMoveSpeed * DirectionToPlayer(), rb.linearVelocity.y);
     }
+    private void UpdateTargetIfNeeded()
+    {
+        if (enemy.PlayerDetected() == false)
+            return;
+        Transform newTarget = enemy.GetPlayerReference().transform;
+        if (newTarget != lastTarget)
+        {
+            lastTarget = newTarget;
+            player = newTarget;
+            // Additional logic can be added here if needed when the target changes
+        }
+    }
 
     private void UpdateBattleTimer() => lastTimeWasInBattle = Time.time;
 
@@ -47,7 +63,7 @@ public class Enemy_BattleState : EnemyState
 
     private bool WithinAttackRange() => DistanceToPlayer() < enemy.attackDistance;
 
-    private bool ShouldRetreat() => DistanceToPlayer() < enemy.minRetreatDistance;  
+    private bool ShouldRetreat() => DistanceToPlayer() < enemy.minRetreatDistance;
 
 
     private float DistanceToPlayer()
@@ -57,7 +73,7 @@ public class Enemy_BattleState : EnemyState
 
         return Mathf.Abs(player.position.x - enemy.transform.position.x); // Only considering horizontal distance
     }
-    
+
     private int DirectionToPlayer()
     {
         if (player == null)
