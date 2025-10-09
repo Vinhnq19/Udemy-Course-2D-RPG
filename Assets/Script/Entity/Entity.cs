@@ -14,7 +14,7 @@ public class Entity : MonoBehaviour
     public int facingDir { get; private set; } = 1; //1 means facing right, -1 means facing left
 
     [Header("Collision Detection")]
-    [SerializeField] protected LayerMask whatIsGround; 
+    public LayerMask whatIsGround; 
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private float wallCheckDistance;
     [SerializeField] private Transform groundCheck;
@@ -57,10 +57,14 @@ public class Entity : MonoBehaviour
     {
         
     }
-    public virtual void SlowDownEntity(float duration, float slowMultiplier)
+    public virtual void SlowDownEntity(float duration, float slowMultiplier, bool canOverrideSlowEffect = false)
     {
-        if(slowDownCoroutine != null)
-            StopCoroutine(slowDownCoroutine);
+        if (slowDownCoroutine != null)
+        {
+            if (canOverrideSlowEffect)
+                StopCoroutine(slowDownCoroutine);
+            else return;
+        }
         slowDownCoroutine = StartCoroutine(SlowdownEntityCo(duration, slowMultiplier));
         
     }
@@ -69,6 +73,10 @@ public class Entity : MonoBehaviour
     {
         yield return null;
 
+    }
+    public virtual void StopSlowDown()
+    {
+        slowDownCoroutine = null;
     }
     public void ReceiveKnockback(Vector2 knockback, float duration)
     {

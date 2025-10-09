@@ -17,6 +17,8 @@ public class Player_DashState : PlayerState
 
         originalGravityScale = rb.gravityScale;
         rb.gravityScale = 0; // Disable gravity during dash
+
+        player.health.SetCanTakeDamage(false);
     }
     public override void Update()
     {
@@ -38,6 +40,7 @@ public class Player_DashState : PlayerState
     {
         base.Exit();
         skillManager.dash.OnEndEffect();
+        player.health.SetCanTakeDamage(true);
         player.SetVelocity(0f, 0f); // Stop the dash by setting velocity to zero
         rb.gravityScale = originalGravityScale; // Restore original gravity scale
     }

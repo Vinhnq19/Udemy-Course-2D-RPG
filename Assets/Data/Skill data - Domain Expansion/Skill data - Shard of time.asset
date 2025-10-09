@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c0398ec7bc53f2940ac11c9b11cf5bb7, type: 3}
-  m_Name: Skill data - TimelessAttack
+  m_Name: Skill data - Shard of time
   m_EditorClassIdentifier: 
-  cost: 2
+  cost: 4
   unlockedByDefault: 0
-  skillType: 1
+  skillType: 4
   upgradeData:
-    upgradeType: 16
-    cooldown: 0
+    upgradeType: 24
+    cooldown: 120
     damageScaleData:
       physical: 1
       elemental: 1
@@ -28,6 +28,6 @@ MonoBehaviour:
       shockDuration: 3
       shockDamageScale: 1
       shockCharge: 0.4
-  displayName: TimelessAttack
-  description: The time echo can perform 1 attack
-  icon: {fileID: -251033231, guid: 5879ebae7c1037f428c0c8571184fc57, type: 3}
+  displayName: Shards of time
+  description: Each enemy trapped in the time warp is struck by multiple time shards
+  icon: {fileID: 181901645, guid: 5879ebae7c1037f428c0c8571184fc57, type: 3}

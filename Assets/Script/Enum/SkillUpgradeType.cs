@@ -30,6 +30,10 @@ public enum SkillUpgradeType
     TimeEcho_ChanceToMultiply,
     TimeEcho_HealWisp,
     TimeEcho_CleanseWisp,
-    TimeEcho_CooldownWisp
+    TimeEcho_CooldownWisp,
+
+    Domain_SlowingDown,
+    Domain_EchoSpam,
+    Domain_ShardSpam
 
 }

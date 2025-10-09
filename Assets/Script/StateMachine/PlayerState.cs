@@ -26,6 +26,17 @@ public abstract class PlayerState : EntityState
             skillManager.dash.SetSkillOnCoolDown();
             stateMachine.ChangeState(player.dashState);
         }
+        if (input.Player.UltimateSpell.WasPressedThisFrame() && skillManager.domainExpansion.CanUseSkill())
+        {
+            if (skillManager.domainExpansion.InstantDomain())
+                skillManager.domainExpansion.CreateDomain();
+            else
+            {
+                stateMachine.ChangeState(player.domainExpansionState);
+
+            }
+            skillManager.domainExpansion.SetSkillOnCoolDown();
+        }
     }
 
     public override void UpdateAnimationParameters()
@@ -40,12 +51,15 @@ public abstract class PlayerState : EntityState
 
     private bool CanDash()
     {
-        if(skillManager.dash.CanUseSkill() == false)
+        if (skillManager.dash.CanUseSkill() == false)
             return false; // Cannot dash if skill is on cooldown
         if (player.wallDetected)
             return false; // Cannot dash if touching a wall
         if (stateMachine.currentState == player.dashState)
             return false; // Cannot dash if already dashing
+
+        if (stateMachine.currentState == player.dashState || stateMachine.currentState == player.domainExpansionState)
+            return false; // Cannot dash if already dashing or attacking
         return true;
     }
 }
