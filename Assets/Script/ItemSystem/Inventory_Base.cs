@@ -1,0 +1,55 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Inventory_Base : MonoBehaviour
+{
+    public event Action onInventoryChange;
+    public int maxInventorySize = 10;
+    public List<Inventory_Item> itemList = new List<Inventory_Item>();
+
+    protected virtual void Awake()
+    {
+        
+    }
+
+    public bool CanAddItem() => itemList.Count < maxInventorySize;
+
+    public Inventory_Item FindStackable(Inventory_Item item)
+    {
+        List<Inventory_Item> stackableItems = itemList.FindAll(i => i.itemData == item.itemData);
+        foreach (var stackableItem in stackableItems)
+        {
+            if (stackableItem.CanAddStack())
+                return stackableItem;
+        }
+        return null;
+    }
+
+    public void AddItem(Inventory_Item itemToAdd)
+    {
+
+        Inventory_Item itemInInventory = FindStackable(itemToAdd);
+        if (itemInInventory != null)
+        {
+            itemInInventory.AddStack();
+        }
+        else
+        {
+            itemList.Add(itemToAdd);
+        }
+        onInventoryChange?.Invoke();
+    }
+
+    public void RemoveItem(Inventory_Item itemToRemove)
+    {
+        itemList.Remove(FindItem(itemToRemove.itemData));
+        onInventoryChange?.Invoke();
+    }
+
+    public Inventory_Item FindItem(ItemDataSO itemData)
+    {
+        // Find an item in the inventory that matches the itemData and can still stack
+        return itemList.Find(item => item.itemData == itemData);
+    }
+}

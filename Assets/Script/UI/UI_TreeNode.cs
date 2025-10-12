@@ -115,12 +115,12 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             Unlock();
         } else if(isLocked)
         {
-            ui.toolTip.LockedSkillEffect();
+            ui.skillToolTip.LockedSkillEffect();
         }
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
-        ui.toolTip.ShowToolTip(true, rectTransform, this);
+        ui.skillToolTip.ShowToolTip(true, rectTransform, this);
         if (isUnlocked || isLocked) return;
             ToggleNoteHighLight(true);
         
@@ -128,7 +128,7 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        ui.toolTip.ShowToolTip(false, rectTransform);
+        ui.skillToolTip.ShowToolTip(false, rectTransform);
         if (isUnlocked || isLocked ) return;
             ToggleNoteHighLight(false);
     }
