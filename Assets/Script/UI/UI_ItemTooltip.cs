@@ -24,13 +24,24 @@ public class UI_ItemTooltip : UI_ToolTip
             return "Used for crafting other items.";
 
         }
+        if(item.itemData.itemType == ItemType.Consumable)
+        {
+            return item.itemData.itemEffect.effectDescription;
+        }
         StringBuilder sb = new StringBuilder();
         sb.AppendLine("");
-        foreach(var mod in item.modifiers)
+        foreach (var mod in item.modifiers)
         {
             string modType = GetStatNameByType(mod.statType);
             string modValue = IsPercentageStat(mod.statType) ? $"{mod.value}%" : mod.value.ToString();
             sb.AppendLine($"{modType}: {modValue}");
+        }
+        
+        if(item.itemEffect != null)
+        {
+            sb.AppendLine("");
+            sb.AppendLine("UniqueEffect:");
+            sb.AppendLine(item.itemEffect.effectDescription);
         }
         return sb.ToString();
     }

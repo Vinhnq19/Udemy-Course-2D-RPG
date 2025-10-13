@@ -10,6 +10,11 @@ public class Entity_Stats : MonoBehaviour
     public Stat_OffensiveGroup offense;
     public Stat_DefendGroup defense;
 
+    protected virtual void Awake()
+    {
+        
+    }
+
     public float GetPhysicalDamage(out bool isCrit, float scaleFactor = 1f)
     {
         float baseDamage = GetBaseDamage();

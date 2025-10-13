@@ -1,8 +1,10 @@
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
+
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 public class Entity_Health : MonoBehaviour, IDamagable
 {
+    public event Action OnTakingDamage;
     private Slider healthBar;
     private Entity_VFX entityVFX;
     private Entity entity;
@@ -65,6 +67,8 @@ public class Entity_Health : MonoBehaviour, IDamagable
         ReduceHealth(physicalDamageTaken + elementalDamageTaken);
 
         lastDamageTaken = physicalDamageTaken + elementalDamageTaken;
+
+        OnTakingDamage?.Invoke();
         return true;
     }
 
@@ -76,7 +80,7 @@ public class Entity_Health : MonoBehaviour, IDamagable
     {
         if (entityStats == null) return false;
         else
-            return Random.Range(0f, 100f) < entityStats.GetEvasion();
+            return UnityEngine.Random.Range(0f, 100f) < entityStats.GetEvasion();
     }
 
     private void TakeKnockback(Transform damageDealer, float finalDamage)

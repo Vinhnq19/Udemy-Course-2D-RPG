@@ -29,6 +29,7 @@ public class Player : Entity
     public Player_CounterAttackState counterAttackState { get; private set; }
     public Player_SwordThrowState swordThrowState { get; private set; }
     public Player_DomainExpansionState domainExpansionState { get; private set; }
+    public PlayerCombat playerCombat { get; private set; }
     #endregion
 
     [Header("Attack details")]
@@ -87,6 +88,7 @@ public class Player : Entity
         counterAttackState = new Player_CounterAttackState(this, stateMachine, "counterAttack");
         swordThrowState = new Player_SwordThrowState(this, stateMachine, "swordThrow");
         domainExpansionState = new Player_DomainExpansionState(this, stateMachine, "jumpFall");
+        playerCombat = GetComponent<PlayerCombat>();
     }
 
     protected override void Start()
@@ -152,9 +154,11 @@ public class Player : Entity
         input.Player.Mouse.performed += ctx => mousePosition = ctx.ReadValue<Vector2>(); // Read the value of the mouse position input as a Vector2
         input.Player.Movement.performed += ctx => moveInput = ctx.ReadValue<Vector2>(); //Read the value of the movement input as a Vector2
         input.Player.Movement.canceled += ctx => moveInput = Vector2.zero; //When the movement input is canceled, set moveInput to zero
-        input.Player.ToggleSkillTreeUI.performed += ctx => ui.ToggleSkillTreeUI(); // Toggle the skill tree UI when the input action is performed
         input.Player.Spell.performed += ctx => skillManager.shard.TryUseSkill();
         input.Player.Spell.performed += ctx => skillManager.timeEcho.TryUseSkill();
+        input.Player.ToggleSkillTreeUI.performed += ctx => ui.ToggleSkillTreeUI(); // Toggle the skill tree UI when the input action is performed
+        input.Player.ToggleInventoryUI.performed += ctx => ui.ToggleInventoryUI(); // Toggle the inventory UI when the input action is performed
+        
 
     }
     private void OnDisable()

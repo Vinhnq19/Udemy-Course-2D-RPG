@@ -2,20 +2,12 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
-[System.Serializable]
-
-public class Buff
-{
-    public StatType type;
-    public float value;
-}
 
 public class Object_Buff : MonoBehaviour
 {
-    private SpriteRenderer sr;
-    private Entity_Stats statsToModify;
+    private Player_Stats statsToModify;
     [Header("Buff Settings")]
-    [SerializeField] private Buff[] buffs;
+    [SerializeField] private BuffEffectData[] buffs;
     [SerializeField] private string buffName = "Buff Name";
     [SerializeField] private float buffDuration = 4f;
     [SerializeField] private bool canbeUsed = true;
@@ -25,7 +17,6 @@ public class Object_Buff : MonoBehaviour
     private Vector3 startPosition;
     private void Awake()
     {
-        sr = GetComponentInChildren<SpriteRenderer>();
         startPosition = transform.position;
     }
     private void Update()
@@ -35,32 +26,13 @@ public class Object_Buff : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (canbeUsed == false)
-            return;
+        statsToModify = collision.GetComponent<Player_Stats>();
 
-        statsToModify = collision.GetComponent<Entity_Stats>();
-        StartCoroutine(BuffCo(buffDuration));
-    }
-    private IEnumerator BuffCo(float duration)
-    {
-        canbeUsed = false;
-        sr.color = Color.clear;
-        foreach (var buff in buffs)
-            statsToModify.GetStatByType(buff.type).AddModifier(buff.value, buffName);
-        yield return new WaitForSeconds(duration);
-        foreach (var buff in buffs)
-            statsToModify.GetStatByType(buff.type).RemoveModifier(buffName);
-        Destroy(gameObject);
-    }
-
-    private void ApplyBuff(bool aply)
-    {
-        foreach (var buff in buffs)
+        if(statsToModify.CanApplyBuffOf(buffName))
         {
-            if (aply)
-                statsToModify.GetStatByType(buff.type).AddModifier(buff.value, buffName);
-            else
-                statsToModify.GetStatByType(buff.type).RemoveModifier(buffName);
+            statsToModify.ApplyBuff(buffs, buffDuration, buffName);
+            Destroy(gameObject);
         }
     }
+
 }
