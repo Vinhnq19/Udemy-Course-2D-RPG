@@ -10,7 +10,7 @@ public class Inventory_Base : MonoBehaviour
 
     protected virtual void Awake()
     {
-        
+
     }
 
     public void TryUseItem(Inventory_Item itemToUse)
@@ -21,20 +21,23 @@ public class Inventory_Base : MonoBehaviour
             return;
         }
         consumable.itemEffect.ExecuteEffect();
-        if(consumable.stackSize > 1)
+        if (consumable.stackSize > 1)
         {
             consumable.RemoveStack();
         }
         else
         {
-            RemoveItem(consumable);
+            RemoveOneItem(consumable);
         }
 
         onInventoryChange?.Invoke();
     }
 
-    public bool CanAddItem() => itemList.Count < maxInventorySize;
-
+    public bool CanAddItem(Inventory_Item itemToAdd)
+    {
+        bool hasStackable = FindStackable(itemToAdd) != null;
+        return hasStackable || itemList.Count < maxInventorySize;
+    }
     public Inventory_Item FindStackable(Inventory_Item item)
     {
         List<Inventory_Item> stackableItems = itemList.FindAll(i => i.itemData == item.itemData);
@@ -61,8 +64,14 @@ public class Inventory_Base : MonoBehaviour
         onInventoryChange?.Invoke();
     }
 
-    public void RemoveItem(Inventory_Item itemToRemove)
+    public void RemoveOneItem(Inventory_Item itemToRemove)
     {
+        Inventory_Item itemInInventory = itemList.Find(item => item == itemToRemove);
+        if (itemInInventory.stackSize > 1)
+        {
+            itemInInventory.RemoveStack();
+        }
+        else
         itemList.Remove(itemToRemove);
         onInventoryChange?.Invoke();
     }

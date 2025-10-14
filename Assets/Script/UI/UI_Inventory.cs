@@ -4,16 +4,14 @@ using UnityEngine;
 public class UI_Inventory : MonoBehaviour
 {
     private Inventory_Player inventory;
-    private UI_ItemSlot[] uiItemSlots;
     private UI_EquipSlot[] uiEquipSlots;
 
-    [SerializeField] private Transform uiItemSlotParent;
+    [SerializeField] private UI_ItemSlotParent inventorySlotParent;
     [SerializeField] private Transform uiEquipSlotParent;
 
     private void Awake()
     {
         uiEquipSlots = uiEquipSlotParent.GetComponentsInChildren<UI_EquipSlot>();
-        uiItemSlots = uiItemSlotParent.GetComponentsInChildren<UI_ItemSlot>();
         inventory = FindFirstObjectByType<Inventory_Player>(); // Assuming there's only one inventory in the scene
         inventory.onInventoryChange += UpdateUI;
 
@@ -22,7 +20,7 @@ public class UI_Inventory : MonoBehaviour
 
     private void UpdateUI()
     {
-        UpdateInventorySlots();
+        inventorySlotParent.UpdateSlots(inventory.itemList);
         UpdateEquipmentSlots();
     }
 
@@ -44,21 +42,5 @@ public class UI_Inventory : MonoBehaviour
         }
     }
 
-    private void UpdateInventorySlots()
-    {
-        List<Inventory_Item> itemList = inventory.itemList;
-        for(int i = 0; i < uiItemSlots.Length; i++)
-        {
-
-            // Update each slot with the corresponding item or clear it if there's no item
-            if(i < itemList.Count)
-            {
-                uiItemSlots[i].UpdateSlot(itemList[i]);
-            }
-            else
-            {
-                uiItemSlots[i].UpdateSlot(null);
-            }
-        }
-    }
+    
 }

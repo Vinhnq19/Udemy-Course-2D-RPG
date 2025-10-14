@@ -136,6 +136,28 @@ public class Player : Entity
         }
     }
 
+    private void TryInteract()
+    {
+        Transform closest = null;
+        float closestDistance = Mathf.Infinity;
+        Collider2D[] objectsAround = Physics2D.OverlapCircleAll(transform.position, 1f);
+
+        foreach (var target in objectsAround)
+        {
+            IInteractable interactable = target.GetComponent<IInteractable>();
+            if (interactable == null) continue;
+
+            float distance = Vector2.Distance(transform.position, target.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closest = target.transform;
+            }
+        }
+        if (closest == null) return;
+        closest.GetComponent<IInteractable>().Interact();
+    }
+
     public override void EntityDeath()
     {
         base.EntityDeath();
@@ -156,6 +178,7 @@ public class Player : Entity
         input.Player.Movement.canceled += ctx => moveInput = Vector2.zero; //When the movement input is canceled, set moveInput to zero
         input.Player.Spell.performed += ctx => skillManager.shard.TryUseSkill();
         input.Player.Spell.performed += ctx => skillManager.timeEcho.TryUseSkill();
+        input.Player.Interact.performed += ctx => TryInteract();
         input.Player.ToggleSkillTreeUI.performed += ctx => ui.ToggleSkillTreeUI(); // Toggle the skill tree UI when the input action is performed
         input.Player.ToggleInventoryUI.performed += ctx => ui.ToggleInventoryUI(); // Toggle the inventory UI when the input action is performed
         
