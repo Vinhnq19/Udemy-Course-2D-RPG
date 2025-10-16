@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Inventory_Player : Inventory_Base
 {
+    public int gold = 10000;
     private Player player;
     public List<Inventory_EquipmentSlot> equipList;
     public Inventory_Storage storage { get; private set; }
@@ -31,7 +32,7 @@ public class Inventory_Player : Inventory_Base
         // No empty slot found, replace the first one
         var slotToReplace = matchingSlots[0];
         var itemToUnequip = slotToReplace.equippedItem;
-        UnequipItem(itemToUnequip, slotToReplace != null);
+        UnequipItem(itemToUnequip);
         EquipItem(inventory_Item, slotToReplace);
     }
     private void EquipItem(Inventory_Item itemToEquip, Inventory_EquipmentSlot slot)

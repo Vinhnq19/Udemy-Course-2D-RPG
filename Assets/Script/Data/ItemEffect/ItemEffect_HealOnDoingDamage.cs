@@ -14,8 +14,10 @@ public class ItemEffect_HealOnDoingDamage : ItemEffectDataSO
     public override void Unsubscribe()
     {
         base.Unsubscribe();
-        player.playerCombat.OnDoingPhysicalDamage -= HealOnDoingDamage;
-        player = null;
+        if(player != null)
+        {
+            player.playerCombat.OnDoingPhysicalDamage -= HealOnDoingDamage;
+        }
     }
     private void HealOnDoingDamage(float damage)
     {

@@ -9,14 +9,16 @@ public class Object_BlackSmith : Object_NPC, IInteractable
     protected override void Awake()
     {
         base.Awake();
-        storage = GetComponent<Inventory_Storage>();
+        storage = FindFirstObjectByType<Inventory_Storage>();
         anim = GetComponentInChildren<Animator>();
         anim.SetBool("isBlackSmith", true);
     }
     public void Interact()
     {
-        ui.storageUI.SetupStorage(inventory, storage);
+        ui.storageUI.SetupStorage(storage);
+        ui.craftUI.SetupCraftUI(storage);
         ui.storageUI.gameObject.SetActive(true);
+        // ui.craftUI.gameObject.SetActive(true);
     }
     protected override void OnTriggerEnter2D(Collider2D other)
     {
@@ -30,5 +32,6 @@ public class Object_BlackSmith : Object_NPC, IInteractable
         base.OnTriggerExit2D(other);
         ui.SwitchOffAllToolTips();
         ui.storageUI.gameObject.SetActive(false);
+        ui.craftUI.gameObject.SetActive(false);
     }
 }

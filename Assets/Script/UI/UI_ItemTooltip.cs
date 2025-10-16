@@ -9,119 +9,25 @@ public class UI_ItemTooltip : UI_ToolTip
     [SerializeField] private TextMeshProUGUI itemType;
     [SerializeField] private TextMeshProUGUI itemInfo;
 
-    public void ShowToolTip(bool show, RectTransform targetRect, Inventory_Item itemToShow)
+    [SerializeField] private TextMeshProUGUI itemPrice;
+    [SerializeField] private Transform merchantInfo;
+
+    public void ShowToolTip(bool show, RectTransform targetRect, Inventory_Item itemToShow, bool buyPrice = false, bool showMerchantInfo = false)
     {
+        base.ShowToolTip(show, targetRect);
+        merchantInfo.gameObject.SetActive(showMerchantInfo);
+
+        int price = buyPrice ? itemToShow.buyPrice : Mathf.FloorToInt(itemToShow.sellPrice);
+        int totalPrice = price * itemToShow.stackSize;
+        string fullStackPrice = ($"Price: {price}x{itemToShow.stackSize} - {totalPrice}g.");
+        string singleStackPrice = ($"Price: {price}g.");
+
+        itemPrice.text = itemToShow.stackSize > 1 ? fullStackPrice : singleStackPrice;
         itemName.text = itemToShow.itemData.itemName;
         itemType.text = itemToShow.itemData.itemType.ToString();
-        itemInfo.text = GetItemInfo(itemToShow);
+        itemInfo.text = itemToShow.GetItemInfo();
 
-        base.ShowToolTip(show, targetRect);
     }
-    public string GetItemInfo(Inventory_Item item)
-    {
-        if (item.itemData.itemType == ItemType.Material)
-        {
-            return "Used for crafting other items.";
-
-        }
-        if(item.itemData.itemType == ItemType.Consumable)
-        {
-            return item.itemData.itemEffect.effectDescription;
-        }
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLine("");
-        foreach (var mod in item.modifiers)
-        {
-            string modType = GetStatNameByType(mod.statType);
-            string modValue = IsPercentageStat(mod.statType) ? $"{mod.value}%" : mod.value.ToString();
-            sb.AppendLine($"{modType}: {modValue}");
-        }
-        
-        if(item.itemEffect != null)
-        {
-            sb.AppendLine("");
-            sb.AppendLine("UniqueEffect:");
-            sb.AppendLine(item.itemEffect.effectDescription);
-        }
-        return sb.ToString();
-    }
-
-    private string GetStatNameByType(StatType statType)
-    {
-        switch (statType)
-        {
-            //Max Health
-            case StatType.MaxHealth:
-                return "Max Health";
-            //Health Regeneration
-            case StatType.HealthRegen:
-                return "Health Regen";
-            //Strength
-            case StatType.Strength:
-                return "Strength";
-            //Intelligence
-            case StatType.Intelligence:
-                return "Intelligence";
-            //Agility
-            case StatType.Agility:
-                return "Agility";
-            //Vitality
-            case StatType.Vitality:
-                return "Vitality";
-            //Attack Speed
-            case StatType.AttackSpeed:
-                return "Attack Speed";
-            //Damage
-            case StatType.Damage:
-                return "Damage";
-            //Critical Chance
-            case StatType.CritChance:
-                return "Crit Chance";
-            //Critical Power
-            case StatType.CritPower:
-                return "Crit Power";
-            //Armor Reduction
-            case StatType.Armor:
-                return "Armor";
-            case StatType.ArmorReduction:
-                return "Armor Reduction";
-            //Fire, Ice, Lightning Damage
-            case StatType.FireDamage:
-                return "Fire Damage";
-            case StatType.IceDamage:
-                return "Ice Damage";
-            case StatType.LightningDamage:
-                return "Lightning Damage";
-            //Evasion
-            case StatType.Evasion:
-                return "Evasion";
-            //Resistances
-            case StatType.FireResistance:
-                return "Fire Resist";
-            case StatType.IceResistance:
-                return "Ice Resist";
-            case StatType.LightningResistance:
-                return "Lightning Resist";
-            default:
-                return "Unknown Stat";
-        }
-    }
-    private bool IsPercentageStat(StatType statType)
-    {
-        switch (statType)
-        {
-            case StatType.CritChance:
-            case StatType.CritPower:
-            case StatType.ArmorReduction:
-            case StatType.AttackSpeed:
-            case StatType.FireResistance:
-            case StatType.IceResistance:
-            case StatType.LightningResistance:
-            case StatType.Evasion:
-                return true;
-            default:
-                return false;
-        }
-    }
+    
     
 }

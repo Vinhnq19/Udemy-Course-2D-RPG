@@ -22,6 +22,7 @@ public class Object_ItemPickup : MonoBehaviour
         if(itemData.itemType == ItemType.Material)
         {
             storage.AddMaterialToStash(itemToAdd);
+            Debug.Log("Picked up material: " + itemData.itemName);
             Destroy(gameObject);
             return;
         }

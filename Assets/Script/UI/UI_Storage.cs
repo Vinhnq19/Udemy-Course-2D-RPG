@@ -3,15 +3,15 @@ using UnityEngine;
 public class UI_Storage : MonoBehaviour
 {
     private Inventory_Storage storage;
-    private Inventory_Player playerInventory;
+    private Inventory_Player inventory;
     [SerializeField] private UI_ItemSlotParent inventorySlotParent;
     [SerializeField] private UI_ItemSlotParent storageSlotParent;
     [SerializeField] private UI_ItemSlotParent materialStashSlotParent;
 
-    public void SetupStorage(Inventory_Player playerInventory, Inventory_Storage storage)
+    public void SetupStorage(Inventory_Storage storage)
     {
-        this.playerInventory = playerInventory;
         this.storage = storage;
+        inventory = storage.playerInventory;
         storage.onInventoryChange += UpdateUI;
         UpdateUI();
 
@@ -23,9 +23,16 @@ public class UI_Storage : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        UpdateUI();
+    }
+
     private void UpdateUI()
     {
-        inventorySlotParent.UpdateSlots(playerInventory.itemList);
+        if (storage == null)
+            return;
+        inventorySlotParent.UpdateSlots(inventory.itemList);
         storageSlotParent.UpdateSlots(storage.itemList);
         materialStashSlotParent.UpdateSlots(storage.materialStash);
     }

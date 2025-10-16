@@ -15,25 +15,34 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
 
     protected void Awake()
     {
-        inventory = FindAnyObjectByType<Inventory_Player>();
         ui = GetComponentInParent<UI>();
         rect = GetComponent<RectTransform>();
+        inventory = FindAnyObjectByType<Inventory_Player>();
     }
 
     public virtual void OnPointerDown(PointerEventData eventData)
     {
         if (itemInSlot == null || itemInSlot.itemData.itemType == ItemType.Material) return;
 
-        if(itemInSlot.itemData.itemType == ItemType.Consumable)
+        bool alternativeInput = Input.GetKey(KeyCode.LeftControl);
+
+        if (alternativeInput)
         {
-            if(itemInSlot.itemEffect.CanBeUsed() == false) return;
-            inventory.TryUseItem(itemInSlot);
+            inventory.RemoveOneItem(itemInSlot);
         }
         else
-        inventory.TryEquipItem(itemInSlot);
+        {
+            if (itemInSlot.itemData.itemType == ItemType.Consumable)
+            {
+                if (itemInSlot.itemEffect.CanBeUsed() == false) return;
+                inventory.TryUseItem(itemInSlot);
+            }
+            else
+                inventory.TryEquipItem(itemInSlot);
 
-        if(itemInSlot == null)
-        ui.itemToolTip.ShowToolTip(false, null);
+            if (itemInSlot == null)
+                ui.itemToolTip.ShowToolTip(false, null);
+        }
     }
     public void UpdateSlot(Inventory_Item item)
     {
@@ -45,20 +54,20 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
             return;
         }
 
-        Color color = Color.white; color.a = .89f;
+        Color color = Color.white; color.a = .9f;
         itemIcon.color = color;
         itemIcon.sprite = itemInSlot.itemData.itemIcon;
         itemStackSize.text = item.stackSize > 1 ? item.stackSize.ToString() : "";
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
         if (itemInSlot == null) return;
         ui.itemToolTip.ShowToolTip(true, rect, itemInSlot);
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public virtual void OnPointerExit(PointerEventData eventData)
     {
-       ui.itemToolTip.ShowToolTip(false, null);
+        ui.itemToolTip.ShowToolTip(false, null);
     }
 }
