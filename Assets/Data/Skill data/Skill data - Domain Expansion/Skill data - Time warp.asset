@@ -9,25 +9,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0398ec7bc53f2940ac11c9b11cf5bb7, type: 3}
+  m_Script: {fileID: 11500000, guid: 5cdfdfbc5df2c414e952a12e3fc10d6f, type: 3}
   m_Name: Skill data - Time warp
   m_EditorClassIdentifier: 
+  displayName: Time warp
+  description: Create a field that drastically slows all enemies caught within.
+  icon: {fileID: -248090357, guid: 7ae0115109b4a6f42a4f7ad59397d09b, type: 3}
   cost: 4
   unlockedByDefault: 0
   skillType: 4
   upgradeData:
     upgradeType: 22
-    cooldown: 120
+    cooldown: 0
     damageScaleData:
-      physical: 1
+      phyiscal: 1
       elemental: 1
       chillDuration: 3
-      chillSlowMultiplier: 0.2
-      burnDuration: 3
+      chillSlowMulitplier: 0.2
+      burnDuratin: 3
       burnDamageScale: 1
       shockDuration: 3
       shockDamageScale: 1
       shockCharge: 0.4
-  displayName: Time warp
-  description: Creat a field that drastically slows all enemies
-  icon: {fileID: 729601070, guid: 5879ebae7c1037f428c0c8571184fc57, type: 3}
