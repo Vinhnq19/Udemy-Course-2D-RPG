@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Inventory_Storage : Inventory_Base
@@ -27,17 +28,17 @@ public class Inventory_Storage : Inventory_Base
 
             amountToConsume = amountToConsume - ConsumedMaterialsAmount(playerInventory.itemList, requiredItem);
 
-            if(amountToConsume > 0)
+            if (amountToConsume > 0)
                 amountToConsume = amountToConsume - ConsumedMaterialsAmount(itemList, requiredItem);
 
-            if(amountToConsume > 0)
+            if (amountToConsume > 0)
                 amountToConsume = amountToConsume - ConsumedMaterialsAmount(materialStash, requiredItem);
         }
     }
 
     private int ConsumedMaterialsAmount(List<Inventory_Item> itemList, Inventory_Item neededItem)
     {
-        
+
         int amountNeeded = neededItem.stackSize;
         int consumedAmount = 0;
 
@@ -50,7 +51,7 @@ public class Inventory_Storage : Inventory_Base
             item.stackSize = item.stackSize - removeAmount;
             consumedAmount = consumedAmount + removeAmount;
 
-            if(item.stackSize <= 0)
+            if (item.stackSize <= 0)
                 itemList.Remove(item);
 
             if (consumedAmount >= amountNeeded)
@@ -73,7 +74,7 @@ public class Inventory_Storage : Inventory_Base
 
     public int GetAvailableAmountOf(ItemDataSO requiredItem)
     {
-        int amount = 0; 
+        int amount = 0;
 
         foreach (var item in playerInventory.itemList)
         {
@@ -155,5 +156,87 @@ public class Inventory_Storage : Inventory_Base
 
 
         TriggerUpdateUI();
+    }
+
+    public override void SaveData(ref GameData data)
+    {
+        base.SaveData(ref data);
+
+        data.storageItems.Clear();
+
+        foreach (var item in itemList)
+        {
+            if (item != null && item.itemData != null)
+            {
+                string saveId = item.itemData.saveId;
+
+                if (data.storageItems.ContainsKey(saveId) == false)
+                    data.storageItems[saveId] = 0;
+                else
+                    data.storageItems[saveId] += item.stackSize;
+            }
+        }
+
+        data.storageMaterials.Clear();
+
+        foreach (var item in materialStash)
+        {
+            if (item != null && item.itemData != null)
+            {
+                string saveId = item.itemData.saveId;
+
+                if (data.storageMaterials.ContainsKey(saveId) == false)
+                    data.storageMaterials[saveId] = 0;
+                else
+                    data.storageMaterials[saveId] += item.stackSize;
+            }
+        }
+    }
+    public override void LoadData(GameData data)
+    {
+        itemList.Clear();
+        materialStash.Clear();
+
+        foreach (var entry in data.storageItems)
+        {
+            string saveId = entry.Key;
+            int stackSize = entry.Value;
+
+            ItemDataSO itemData = itemDatabase.GetItemData(saveId);
+
+            if (itemData == null)
+            {
+                Debug.LogWarning("Item data with saveId " + saveId + " not found in database!");
+                continue;
+            }
+
+            for (int i = 0; i < stackSize; i++)
+            {
+                Inventory_Item itemToLoad = new Inventory_Item(itemData);
+                AddItem(itemToLoad);
+            }
+
+        }
+
+        foreach (var entry in data.storageMaterials)
+        {
+            string saveId = entry.Key;
+            int stackSize = entry.Value;
+
+            ItemDataSO itemData = itemDatabase.GetItemData(saveId);
+
+            if (itemData == null)
+            {
+                Debug.LogWarning("Item data with saveId " + saveId + " not found in database!");
+                continue;
+            }
+
+            for (int i = 0; i < stackSize; i++)
+            {
+                Inventory_Item itemToLoad = new Inventory_Item(itemData);
+                AddMaterialToStash(itemToLoad);
+            }
+        }
+
     }
 }

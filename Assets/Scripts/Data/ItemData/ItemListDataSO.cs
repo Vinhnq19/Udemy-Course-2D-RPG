@@ -1,4 +1,7 @@
 using UnityEngine;
+using UnityEditor;
+using System.Linq;
+using UnityEditor.VersionControl;
 
 
 [CreateAssetMenu(menuName = "RPG Setup/Item Data/Item list", fileName = "List of items - ")]
@@ -6,4 +9,23 @@ using UnityEngine;
 public class ItemListDataSO : ScriptableObject
 {
     public ItemDataSO[] itemList;
+
+    public ItemDataSO GetItemData(string saveId)
+    {
+        return itemList.FirstOrDefault(item => item != null && item.saveId == saveId);
+    }
+    #if UNITY_EDITOR
+    [ContextMenu("Auto-fill with all items")]
+
+    public void CollectItemsData()
+    {
+        string[] guids = AssetDatabase.FindAssets("t:ItemDataSO");
+        itemList = guids.
+        Select(guid => AssetDatabase.LoadAssetAtPath<ItemDataSO>(AssetDatabase.GUIDToAssetPath(guid))).
+        Where(item => item != null).ToArray();
+
+        EditorUtility.SetDirty(this);
+        AssetDatabase.SaveAssets();
+    }
+    #endif
 }
