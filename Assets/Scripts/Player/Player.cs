@@ -50,6 +50,8 @@ public class Player : Entity
     [Header("Movement details")]
     public float moveSpeed;
     public float jumpForce = 5;
+    public int maxJumpCount = 2; // Maximum number of jumps (1 = single jump, 2 = double jump)
+    [HideInInspector] public int currentJumpCount; // Current jump counter
     public Vector2 wallJumpForce;
     [Range(0, 1)]
     public float inAirMoveMultiplier = .7f; // Should be from 0 to 1;

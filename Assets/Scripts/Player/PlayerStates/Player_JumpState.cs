@@ -10,7 +10,8 @@ public class Player_JumpState : Player_AiredState
     {
         base.Enter();
 
-
+        // Increment jump counter
+        player.currentJumpCount++;
         player.SetVelocity(rb.linearVelocity.x, player.jumpForce);
     }
 

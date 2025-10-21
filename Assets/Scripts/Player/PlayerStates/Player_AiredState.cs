@@ -14,6 +14,10 @@ public class Player_AiredState : PlayerState
         if (player.moveInput.x != 0)
             player.SetVelocity(player.moveInput.x * (player.moveSpeed * player.inAirMoveMultiplier), rb.linearVelocity.y);
 
+        // Allow double jump (or more) in air
+        if (input.Player.Jump.WasPressedThisFrame() && player.currentJumpCount < player.maxJumpCount)
+            stateMachine.ChangeState(player.jumpState);
+
         if (input.Player.Attack.WasPressedThisFrame())
             stateMachine.ChangeState(player.jumpAttackState);
     }

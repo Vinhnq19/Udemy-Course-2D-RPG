@@ -6,6 +6,13 @@ public class Player_GroundedState : PlayerState
     {
     }
 
+    public override void Enter()
+    {
+        base.Enter();
+        // Reset jump counter when landing on ground
+        player.currentJumpCount = 0;
+    }
+
     public override void Update()
     {
         base.Update();
