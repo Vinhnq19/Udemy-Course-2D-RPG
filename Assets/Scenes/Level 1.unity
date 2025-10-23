@@ -2414,7 +2414,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1381488667}
   - {fileID: 936588510}
   - {fileID: 1974936074}
   - {fileID: 50938078}
@@ -62079,7 +62078,7 @@ GameObject:
   - component: {fileID: 1381488665}
   - component: {fileID: 1381488664}
   m_Layer: 9
-  m_Name: Object_ItemPickup - Book of Oblivion
+  m_Name: Object_ItemPickup - Portal Scroll
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62175,7 +62174,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 2135913722, guid: 7ae0115109b4a6f42a4f7ad59397d09b, type: 3}
+  m_Sprite: {fileID: 1186909203, guid: 7ae0115109b4a6f42a4f7ad59397d09b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -62199,7 +62198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropForce: {x: 3, y: 10}
-  itemData: {fileID: 11400000, guid: 45d927e6a20181e4aacdcf02ba0b5d5e, type: 2}
+  itemData: {fileID: 11400000, guid: b8f1ade2ad4733f419eb5587f92809e8, type: 2}
   sr: {fileID: 1381488665}
   rb: {fileID: 0}
   col: {fileID: 0}
@@ -62212,11 +62211,11 @@ Transform:
   m_GameObject: {fileID: 1381488663}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.6500001, y: 0.49, z: 0}
+  m_LocalPosition: {x: 8.42, y: 1.02, z: -1.1572925}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 687868039}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1391029508
 GameObject:
@@ -64793,6 +64792,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 448b3fcd215162345942cf1ad16d37e5, type: 3}
+--- !u!1001 &3395312401269376286
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1523349356801567396, guid: e3b9c8a9f6d2ad7439cb4f9b41a4204b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.92
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523349356801567396, guid: e3b9c8a9f6d2ad7439cb4f9b41a4204b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523349356801567396, guid: e3b9c8a9f6d2ad7439cb4f9b41a4204b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523349356801567396, guid: e3b9c8a9f6d2ad7439cb4f9b41a4204b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523349356801567396, guid: e3b9c8a9f6d2ad7439cb4f9b41a4204b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523349356801567396, guid: e3b9c8a9f6d2ad7439cb4f9b41a4204b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523349356801567396, guid: e3b9c8a9f6d2ad7439cb4f9b41a4204b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523349356801567396, guid: e3b9c8a9f6d2ad7439cb4f9b41a4204b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523349356801567396, guid: e3b9c8a9f6d2ad7439cb4f9b41a4204b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523349356801567396, guid: e3b9c8a9f6d2ad7439cb4f9b41a4204b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085877241204444876, guid: e3b9c8a9f6d2ad7439cb4f9b41a4204b, type: 3}
+      propertyPath: m_Name
+      value: Portal
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e3b9c8a9f6d2ad7439cb4f9b41a4204b, type: 3}
 --- !u!1001 &4949161324652310387
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -64879,3 +64935,5 @@ SceneRoots:
   - {fileID: 1991178698}
   - {fileID: 1554327269}
   - {fileID: 1417893189}
+  - {fileID: 3395312401269376286}
+  - {fileID: 1381488667}

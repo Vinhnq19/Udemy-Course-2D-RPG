@@ -29,7 +29,7 @@ public Vector3 GetPositionAndSetTriggerFalse()
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!canBeTriggered) return;
-        SaveManager.instance.SaveGame();
+        
         GameManager.instance.ChangeScene(transferToScene, connectedWaypoint);
     }
 

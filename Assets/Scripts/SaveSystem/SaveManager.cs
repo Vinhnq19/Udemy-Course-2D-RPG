@@ -24,7 +24,7 @@ public class SaveManager : MonoBehaviour
         dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, encryptData); //persistentDataPath is a special folder for saving data
         allSaveables = FindISaveables();
 
-        yield return new WaitForSeconds(0.1f);
+        yield return null;
         
         LoadGame();
     }
@@ -65,6 +65,8 @@ public class SaveManager : MonoBehaviour
     {
         dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, encryptData);
         dataHandler.Delete();
+
+        LoadGame();
     }
 
     private void OnApplicationQuit()
