@@ -7,10 +7,12 @@ public class Object_Checkpoint : MonoBehaviour, ISaveable
  
     public bool isActive { get; private set; }
     private Animator animator;
+    private AudioSource fireAudioSource;
 
     private void Awake()
     {
         animator = GetComponentInChildren<Animator>();
+        fireAudioSource = GetComponentInChildren<AudioSource>();
     }
 
     public string GetCheckpointId() => checkpointId;
@@ -21,6 +23,10 @@ public class Object_Checkpoint : MonoBehaviour, ISaveable
     {
         isActive = activate;
         animator.SetBool("isActive", activate);
+        if (isActive && fireAudioSource.isPlaying == false)
+            fireAudioSource.Play();
+        if( isActive == false)
+            fireAudioSource.Stop();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
