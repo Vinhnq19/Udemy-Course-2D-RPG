@@ -2,21 +2,38 @@ using UnityEngine;
 
 public class Enemy_Health : Entity_Health
 {
-    private Enemy enemy => GetComponent<Enemy>();
+    private Enemy enemy;
+    private Player_QuestManager questManager;
 
-    public override bool TakeDamage(float damage, float elementalDamage,ElementType element, Transform damageDealer)
+    protected override void Start()
     {
-        if(canTakeDamage == false) 
+        base.Start();
+
+        enemy = GetComponent<Enemy>();
+
+        questManager = Player.instance.questManager;
+    }
+
+    public override bool TakeDamage(float damage, float elementalDamage, ElementType element, Transform damageDealer)
+    {
+        if (canTakeDamage == false)
             return false;
 
-        bool wasHit = base.TakeDamage(damage,elementalDamage,element, damageDealer);
+        bool wasHit = base.TakeDamage(damage, elementalDamage, element, damageDealer);
 
         if (wasHit == false)
             return false;
 
-        if(damageDealer.GetComponent<Player>() != null)
+        if (damageDealer.GetComponent<Player>() != null)
             enemy.TryEnterBattleState(damageDealer);
 
-        return true;    
+        return true;
+    }
+
+    protected override void Die()
+    {
+        base.Die();
+
+        questManager.AddProgress(enemy.questTargetId);
     }
 }
