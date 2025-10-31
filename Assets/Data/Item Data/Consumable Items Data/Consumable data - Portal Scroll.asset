@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemPrice: 100
   minStackSizeAtShop: 1
-  maxStackSizeAtShop: 1
+  maxStackSizeAtShop: 5
   itemRarity: 100
   dropChance: 65
   maxDropChance: 65
@@ -23,4 +23,4 @@ MonoBehaviour:
   itemIcon: {fileID: 1186909203, guid: 7ae0115109b4a6f42a4f7ad59397d09b, type: 3}
   itemType: 4
   maxStackSize: 20
-  itemEffect: {fileID: 11400000, guid: b2bef99c61ff817468b80e41de079811, type: 2}
+  itemEffect: {fileID: 11400000, guid: 5e88aefc92812614d85b1a9dd67a3bd0, type: 2}

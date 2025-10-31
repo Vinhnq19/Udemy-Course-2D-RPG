@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 284d3ecb2bb583f429d80b8637bdbffb, type: 3}
+  m_Script: {fileID: 11500000, guid: 940ba25cfbc90d145866d28ba99acb6b, type: 3}
   m_Name: Item effect data - Portal Scroll
   m_EditorClassIdentifier: 
-  effectDescription: Open portal to the camp
+  effectDescription: 'Opens portal to the camp. '

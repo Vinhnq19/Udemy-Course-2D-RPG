@@ -3,6 +3,8 @@ using UnityEngine;
 public class UI : MonoBehaviour
 {
     public static UI instance;
+
+
     [SerializeField] private GameObject[] uiElements;
     public bool alternativeInput { get; private set; }
     private PlayerInputSet input;
@@ -20,8 +22,10 @@ public class UI : MonoBehaviour
     public UI_InGame inGameUI { get; private set; }
     public UI_Options optionsUI { get; private set; }
     public UI_DeathScreen deathScreenUI { get; private set; }
-    public UI_FadeScreen fadeScreenUI { get; set; }
+    public UI_FadeScreen fadeScreenUI { get; private set; }
     public UI_Quest questUI { get; private set; }
+    public UI_Dialogue dialogueUI { get; private set; }
+
     #endregion
 
     private bool skillTreeEnabled;
@@ -30,6 +34,7 @@ public class UI : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
         itemToolTip = GetComponentInChildren<UI_ItemToolTip>();
         skillToolTip = GetComponentInChildren<UI_SkillToolTip>();
         statToolTip = GetComponentInChildren<UI_StatToolTip>();
@@ -44,6 +49,7 @@ public class UI : MonoBehaviour
         deathScreenUI = GetComponentInChildren<UI_DeathScreen>(true);
         fadeScreenUI = GetComponentInChildren<UI_FadeScreen>(true);
         questUI = GetComponentInChildren<UI_Quest>(true);
+        dialogueUI = GetComponentInChildren<UI_Dialogue>(true);
 
         skillTreeEnabled = skillTreeUI.gameObject.activeSelf;
         inventoryEnabled = inventoryUI.gameObject.activeSelf;
@@ -65,7 +71,7 @@ public class UI : MonoBehaviour
         input.UI.AlternativeInput.canceled += ctx => alternativeInput = false;
 
         input.UI.OptionsUI.performed += ctx =>
-        {
+        { 
             foreach (var element in uiElements)
             {
                 if (element.activeSelf)
@@ -79,41 +85,51 @@ public class UI : MonoBehaviour
             Time.timeScale = 0;
             OpenOptionsUI();
         };
+
+        input.UI.DialogueInteraction.performed += ctx =>
+        {
+            if (dialogueUI.gameObject.activeInHierarchy)
+                dialogueUI.DialogueInteraction();
+        };
+
+        input.UI.DialogueNavigation.performed += ctx =>
+        {
+            int direction = Mathf.RoundToInt(ctx.ReadValue<float>());
+
+            if (dialogueUI.gameObject.activeInHierarchy)
+                dialogueUI.NavigateChoice(direction);
+        };
     }
 
-    public void OnDeathScreenUI()
+    public void OpenDeathScreenUI()
     {
-        SwithTo(deathScreenUI.gameObject);
-        input.Disable();
+        SwitchTo(deathScreenUI.gameObject);
+        input.Disable(); // pay attention to this if you use gamepad
     }
-    
 
     public void OpenOptionsUI()
     {
-
         HideAllTooltips();
-        SwithTo(optionsUI.gameObject);
         StopPlayerControls(true);
+        SwitchTo(optionsUI.gameObject);
     }
 
     public void SwitchToInGameUI()
     {
-
-
+        
         HideAllTooltips();
         StopPlayerControls(false);
-
-        SwithTo(inGameUI.gameObject);
-
+        SwitchTo(inGameUI.gameObject);
 
         skillTreeEnabled = false;
         inventoryEnabled = false;
     }
     
-    private void SwithTo(GameObject objectToSwitchOn)
+    private void SwitchTo(GameObject objectToSwitchOn)
     {
         foreach (var element in uiElements)
             element.gameObject.SetActive(false);
+
         objectToSwitchOn.SetActive(true);
     }
 
@@ -164,6 +180,17 @@ public class UI : MonoBehaviour
 
         StopPlayerControlsIfNeeded();
     }
+
+    public void OpenDialogueUI(DialogueLineSO firstLine,DialogueNpcData npcData)
+    {
+        StopPlayerControls(true);
+        HideAllTooltips();
+
+        dialogueUI.gameObject.SetActive(true);
+        dialogueUI.SetupNpcData(npcData);
+        dialogueUI.PlayDialogueLine(firstLine);
+    }
+
     public void OpenQuestUI(QuestDataSO[] questsToShow)
     {
         StopPlayerControls(true);
@@ -181,6 +208,18 @@ public class UI : MonoBehaviour
         if (openStorageUI == false)
         {
             craftUI.gameObject.SetActive(false);
+            HideAllTooltips();
+        }
+    }
+
+    public void OpenCraftUI(bool openStorageUI)
+    {
+        craftUI.gameObject.SetActive(openStorageUI);
+        StopPlayerControls(openStorageUI);
+
+        if (openStorageUI == false)
+        {
+            storageUI.gameObject.SetActive(false);
             HideAllTooltips();
         }
     }

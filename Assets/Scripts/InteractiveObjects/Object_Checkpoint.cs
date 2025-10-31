@@ -1,37 +1,40 @@
+using UnityEditor;
 using UnityEngine;
 
 public class Object_Checkpoint : MonoBehaviour, ISaveable
 {
     [SerializeField] private string checkpointId;
     [SerializeField] private Transform respawnPoint;
- 
+
     public bool isActive { get; private set; }
-    private Animator animator;
+    private Animator anim;
     private AudioSource fireAudioSource;
 
     private void Awake()
     {
-        animator = GetComponentInChildren<Animator>();
-        fireAudioSource = GetComponentInChildren<AudioSource>();
+        anim = GetComponentInChildren<Animator>();
+        fireAudioSource = GetComponent<AudioSource>();
     }
 
     public string GetCheckpointId() => checkpointId;
 
     public Vector3 GetPosition() => respawnPoint == null ? transform.position : respawnPoint.position;
 
+
     public void ActivateCheckpoint(bool activate)
     {
         isActive = activate;
-        animator.SetBool("isActive", activate);
+        anim.SetBool("isActive", activate);
+
         if (isActive && fireAudioSource.isPlaying == false)
             fireAudioSource.Play();
-        if( isActive == false)
+
+        if(isActive == false)
             fireAudioSource.Stop();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
         ActivateCheckpoint(true);
     }
 
@@ -47,10 +50,10 @@ public class Object_Checkpoint : MonoBehaviour, ISaveable
             return;
 
         if (data.unlockedCheckpoints.ContainsKey(checkpointId) == false)
-        {
             data.unlockedCheckpoints.Add(checkpointId, true);
-        }
     }
+
+
     private void OnValidate()
     {
 #if UNITY_EDITOR

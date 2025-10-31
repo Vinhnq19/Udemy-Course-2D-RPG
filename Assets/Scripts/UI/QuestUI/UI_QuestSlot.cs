@@ -1,20 +1,23 @@
-using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_QuestSlot : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI questName;
-    [SerializeField] private Image[] rewardQuickReviewSlots;
+    [SerializeField] private Image[] rewardQuickPreviwSlots;
 
     public QuestDataSO questInSlot { get; private set; }
-    private UI_QuestPreview questPreview;
+    private UI_QuestPreviw questPreviw;
+
     public void SetupQuestSlot(QuestDataSO questDataSO)
     {
-        questPreview = transform.root.GetComponentInChildren<UI_Quest>().GetQuestPreview();
+        questPreviw = transform.root.GetComponentInChildren<UI_Quest>().GetQuestPreviw();
+
         questInSlot = questDataSO;
         questName.text = questDataSO.questName;
-        foreach (var previwIcon in rewardQuickReviewSlots)
+
+        foreach (var previwIcon in rewardQuickPreviwSlots)
         {
             previwIcon.gameObject.SetActive(false);
         }
@@ -23,15 +26,16 @@ public class UI_QuestSlot : MonoBehaviour
         {
             if (questDataSO.rewardItems[i] == null || questDataSO.rewardItems[i].itemData == null) continue;
 
-            Image slot = rewardQuickReviewSlots[i];
+            Image slot = rewardQuickPreviwSlots[i];
 
             slot.gameObject.SetActive(true);
             slot.sprite = questDataSO.rewardItems[i].itemData.itemIcon;
             slot.GetComponentInChildren<TextMeshProUGUI>().text = questDataSO.rewardItems[i].stackSize.ToString();
         }
     }
-    public void UpdateQuestPreview()
+
+    public void UpdateQuestPreviw()
     {
-        questPreview.SetupQuestPreview(questInSlot);
+        questPreviw.SetupQuestPreviw(questInSlot);
     }
 }

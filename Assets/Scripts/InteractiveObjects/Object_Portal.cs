@@ -1,14 +1,13 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Object_Portal : MonoBehaviour, ISaveable
 {
-    public static Object_Portal instance;
+    public static Object_Portal instnace;
 
     public bool isActive { get; private set; }
-    [SerializeField] private Vector2 defaultPosition;
-    [SerializeField] private string townSceneName = "Level 0";
+    [SerializeField] private Vector2 defaultPosition; // where portal apperas in town
+    [SerializeField] private string townSceneName = "Level_0";
 
     [SerializeField] private Transform respawnPoint;
     [SerializeField] private bool canBeTriggered;
@@ -19,9 +18,9 @@ public class Object_Portal : MonoBehaviour, ISaveable
 
     private void Awake()
     {
-        instance = this;
+        instnace = this;
         currentSceneName = SceneManager.GetActiveScene().name;
-        transform.position = new Vector3(9999, 9999, 0);
+        transform.position = new Vector3(9999, 9999); // Hide by default
     }
 
     public void ActivatePortal(Vector3 position, int facingDir = 1)
@@ -29,20 +28,19 @@ public class Object_Portal : MonoBehaviour, ISaveable
         isActive = true;
         transform.position = position;
         SaveManager.instance.GetGameData().inScenePortals.Clear();
-        // Set the facing direction if needed
+
         if (facingDir == -1)
             transform.Rotate(0, 180, 0);
     }
 
     public void DisableIfNeeded()
     {
-        if (returningFromTown == false) return;
+        if (returningFromTown == false)
+            return;
 
         SaveManager.instance.GetGameData().inScenePortals.Remove(currentSceneName);
-
         isActive = false;
-        transform.position = new Vector3(9999, 9999, 0);
-
+        transform.position = new Vector3(9999, 9999);
     }
 
     private void UseTeleport()
@@ -53,22 +51,14 @@ public class Object_Portal : MonoBehaviour, ISaveable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (canBeTriggered == false) return;
+        if (canBeTriggered == false)
+            return;
 
         UseTeleport();
     }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        canBeTriggered = true;
-    }
-
-    public void SetTrigger(bool trigger) => canBeTriggered = trigger;
-
-    public Vector2 GetPosition()
-    {
-        return respawnPoint != null ? respawnPoint.position : transform.position;
-    }
+    private void OnTriggerExit2D(Collider2D collision) =>       canBeTriggered = true;
+    public void SetTrigger(bool trigger) => canBeTriggered = trigger; 
+    public Vector3 GetPosition() => respawnPoint != null ? respawnPoint.position : transform.position;
 
     private bool InTown() => currentSceneName == townSceneName;
 
@@ -87,12 +77,12 @@ public class Object_Portal : MonoBehaviour, ISaveable
 
         returningFromTown = data.returningFromTown;
         returnSceneName = data.portalDestinationSceneName;
-
     }
 
     public void SaveData(ref GameData data)
     {
         data.returningFromTown = InTown();
+
         if (isActive && InTown() == false)
         {
             data.inScenePortals[currentSceneName] = transform.position;
@@ -102,7 +92,6 @@ public class Object_Portal : MonoBehaviour, ISaveable
         {
             data.inScenePortals.Remove(currentSceneName);
         }
-
 
     }
 }

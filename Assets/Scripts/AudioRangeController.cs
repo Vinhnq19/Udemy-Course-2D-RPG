@@ -4,9 +4,9 @@ public class AudioRangeController : MonoBehaviour
 {
     private AudioSource source;
     private Transform player;
+
     [SerializeField] private float minDistanceToHearSound = 12;
     [SerializeField] private bool showGizmo;
-
     private float maxVolume;
 
     private void Start()
@@ -19,9 +19,12 @@ public class AudioRangeController : MonoBehaviour
 
     private void Update()
     {
-        if (player == null) return;
+        if (player == null)
+            return;
+
         float distance = Vector2.Distance(player.position, transform.position);
         float t = Mathf.Clamp01(1 - (distance / minDistanceToHearSound));
+
         float targetVolume = Mathf.Lerp(0, maxVolume, t * t);
         source.volume = Mathf.Lerp(source.volume, targetVolume, Time.deltaTime * 3);
     }
@@ -34,5 +37,4 @@ public class AudioRangeController : MonoBehaviour
             Gizmos.DrawWireSphere(transform.position, minDistanceToHearSound);
         }
     }
-
 }

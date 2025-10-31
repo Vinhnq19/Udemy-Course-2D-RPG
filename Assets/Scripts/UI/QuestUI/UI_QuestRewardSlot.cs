@@ -7,10 +7,11 @@ public class UI_QuestRewardSlot : UI_ItemSlot
     {
         
     }
+
     public override void OnPointerEnter(PointerEventData eventData)
     {
         if (itemInSlot == null) return;
 
-        ui.itemToolTip.ShowToolTip(true, rect, itemInSlot, false, false, false);
+        ui.itemToolTip.ShowToolTip(true, rect, itemInSlot,false,false,false);
     }
 }

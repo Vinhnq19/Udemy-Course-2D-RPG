@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : Entity
 {
-    public static Player instance; // Singleton instance: access via Player.instance
+    public static Player instance;
     public static event Action OnPlayerDeath;
 
     public UI ui { get; private set; }
@@ -35,7 +35,6 @@ public class Player : Entity
     public Player_SwordThrowState swordThrowState { get; private set; }
     public Player_DomainExpansionState domainExpansionState { get; private set; }
 
-
     #endregion
 
     [Header("Attack details")]
@@ -52,8 +51,6 @@ public class Player : Entity
     [Header("Movement details")]
     public float moveSpeed;
     public float jumpForce = 5;
-    public int maxJumpCount = 2; // Maximum number of jumps (1 = single jump, 2 = double jump)
-    [HideInInspector] public int currentJumpCount; // Current jump counter
     public Vector2 wallJumpForce;
     [Range(0, 1)]
     public float inAirMoveMultiplier = .7f; // Should be from 0 to 1;
@@ -69,7 +66,6 @@ public class Player : Entity
     {
         base.Awake();
         instance = this;
-
 
         ui = FindAnyObjectByType<UI>();
         vfx = GetComponent<Player_VFX>();

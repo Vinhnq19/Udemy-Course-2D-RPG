@@ -9,7 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd9154e9e38f4a04b9bdd9479900b3a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 9dddea3aa5f7fa64dbef0cda0762a6e4, type: 3}
   m_Name: QUEST DATABASE
   m_EditorClassIdentifier: 
-  allQuests: []
+  allQuests:
+  - {fileID: 11400000, guid: 63eec79711683b5498a187e011a14579, type: 2}
+  - {fileID: 11400000, guid: b5daaee0fa2ebbf43b3da3de6a038461, type: 2}
+  - {fileID: 11400000, guid: f1bb98f65cc03334d8b8644b77c4840f, type: 2}
